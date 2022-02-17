@@ -53,4 +53,4 @@ public interface IDalService
 ```
 Additional files that can be used in javascript to add support for nullable values are generated in `obj/GeneratedFiles/javascript/` folder.
 
-For a boilerplate project which creates a gRPC service check https://github.com/LarnacaBeach/mssql.adapter/tree/master/examples/mssql.adapter
+For a boilerplate project which creates a gRPC service check [mssql.adapter](https://github.com/LarnacaBeach/mssql.adapter/tree/main/examples/mssql.adapter)
