@@ -1,0 +1,13 @@
+{
+  "profiles": {
+    "mssql.adapter": {
+      "applicationUrl": "http://localhost:5500",
+      "commandName": "Project",
+      "commandLineArgs": "//--proto",
+      "dotnetRunMessages": "true",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

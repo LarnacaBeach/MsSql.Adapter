@@ -1,0 +1,67 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using ProtoBuf;
+
+namespace {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
+
+{{~
+func getNullableRegion(className, maxOrder)
+    include 'Templates/NullableRegion.sbncs' className maxOrder
+end
+
+for proc in DbMeta.Procedures
+    className = (GetBaseClassName proc.SpName) + "Response"
+}}
+[DataContract]
+public class {{ className }}
+{
+    [DataMember(Order = 1)]
+    public int StatusCode { get; set; } = 0;
+
+    [DataMember(Order = 2)]
+    public string StatusMessage { get; set; } = "";
+{{~
+    for param in proc.Responses
+        if param.Order <= 0
+            continue
+        end
+}}
+    [DataMember(Order = {{ param.Order }})]
+    public List<{{ GetBaseClassName proc.SpName }}Item{{ param.Order - 2 }}> {{ param.Name }} { get; set; } = new();
+{{~
+    end
+
+    for param in proc.Responses
+        if param.Order <= 0
+            continue
+        end
+
+        className = (GetBaseClassName proc.SpName) + "Item" + (param.Order - 2)
+}}
+    [DataContract]
+    [ProtoContract(SkipConstructor = true)]
+    public class {{ className }}
+    {
+{{~
+        for p in param.Params
+            memberType = GetCSharpNullableFriendlyType p.SqlType
+            memberName = ToPascalCase p.Name
+}}
+        {{ memberType }} _{{ memberName }};
+        [DataMember(Order = {{ p.Order }})]
+        public {{ memberType }} {{ memberName }} {
+            get { return _GetNullableValue(_{{ memberName }}, {{ p.Order }}); }
+            set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ p.Order }}); }
+        }
+{{~
+        end
+}}
+        {{ getNullableRegion className param.ParamsMaxOrder }}
+    }
+{{~
+    end
+~}}
+}
+{{~ end ~}}

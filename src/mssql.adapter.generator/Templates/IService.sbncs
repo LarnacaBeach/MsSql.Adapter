@@ -1,0 +1,15 @@
+﻿using System.ServiceModel;
+using System.Threading.Tasks;
+
+namespace {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
+
+[ServiceContract(Name = "{{ Namespace }}.{{ ToPascalCase DbMeta.Name }}.{{ ToPascalCase DbMeta.Name }}Service")]
+public interface I{{ Name }}Service
+{
+{{~
+for proc in DbMeta.Procedures
+    baseClass = GetBaseClassName proc.SpName
+}}
+    Task<{{ baseClass }}Response> {{ baseClass }}({{ baseClass }}Request req);
+{{~ end ~}}
+}

@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.Runtime.Serialization;
+using ProtoBuf;
+
+namespace {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
+
+{{~
+func getNullableRegion(className, maxOrder)
+    include 'Templates/NullableRegion.sbncs' className maxOrder
+end
+
+listedTVP = []
+
+for proc in DbMeta.Procedures
+    className = (GetBaseClassName proc.SpName) + "Request"
+}}
+[DataContract]
+[ProtoContract(SkipConstructor = true)]
+public class {{ className }}
+{
+{{~
+    for param in proc.Request
+        memberName = ToPascalCase param.Name
+
+        if param.TVP != null
+}}
+    [DataMember(Order = {{ param.Order }})]
+    public List<TVP{{ param.Name }}> {{ memberName }} { get; set; } = new();
+{{~
+        else
+            memberType = GetCSharpNullableFriendlyType param.SqlType
+}}
+    {{ memberType }} _{{ memberName }};
+    [DataMember(Order = {{ param.Order }})]
+    public {{ memberType }} {{ memberName }} {
+        get { return _GetNullableValue(_{{ memberName }}, {{ param.Order }}); }
+        set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ param.Order }}); }
+    }
+{{~
+        end
+    end
+}}
+    {{ getNullableRegion className proc.RequestMaxOrder }}
+}
+{{~
+    for param in proc.Request
+        className = "TVP" + param.Name
+
+        if (param.TVP == null) || (array.contains listedTVP className)
+            continue
+        end
+
+        listedTVP = array.add listedTVP className
+}}
+[DataContract]
+[ProtoContract(SkipConstructor = true)]
+public class {{ className }}
+{
+{{~
+        for p in param.TVP
+            memberType = GetCSharpNullableFriendlyType p.SqlType
+            memberName = ToPascalCase p.Name
+}}
+    {{ memberType }} _{{ memberName }};
+    [DataMember(Order = {{ p.Order }})]
+    public {{ memberType }} {{ memberName }} {
+        get { return _GetNullableValue(_{{ memberName }}, {{ p.Order }}); }
+        set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ p.Order }}); }
+    }
+{{~
+        end
+}}
+    {{ getNullableRegion className param.TVPMaxOrder }}
+}
+{{~
+    end
+end
+~}}

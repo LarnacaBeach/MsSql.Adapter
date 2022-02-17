@@ -1,0 +1,60 @@
+﻿using Microsoft.Extensions.Options;
+using System.Data.SqlClient;
+using System.Security;
+using standard.types;
+
+namespace {{ Namespace }};
+
+public partial class {{ Name }}ServiceBase
+{
+    protected readonly string _connectionString;
+    protected readonly SqlCredential? _credential;
+    protected readonly ILogger<{{ Name }}Service> _logger;
+
+    public {{ Name }}ServiceBase(IServiceProvider serviceProvider)
+    {
+        var options = serviceProvider.GetRequiredService<IOptions<{{ OptionsKey }}>>().Value;
+        _connectionString = options.{{ OptionsConnectionStringKey }};
+
+        if (!string.IsNullOrEmpty(options.{{ OptionsConnectionUserKey }}))
+        {
+            var sc = new SecureString();
+            foreach (char c in options.{{ OptionsConnectionPasswordKey }} ?? "") sc.AppendChar(c);
+            sc.MakeReadOnly();
+
+            _credential = new SqlCredential(options.{{ OptionsConnectionUserKey }}, sc);
+        }
+        else
+        {
+            _credential = null;
+        }
+        
+        this._logger = serviceProvider.GetRequiredService<ILogger<{{ Name }}Service>>();
+    }
+
+    protected virtual void LogException(Exception ex, string spName)
+    {
+        _logger.LogError(ex, @"{spName} failed: {message}", spName, ex.Message);
+    }
+
+    protected virtual int GetStatusCode(Exception ex, string spName)
+    {
+        if (ex is SqlException sqlEx)
+        {
+            switch (sqlEx.Number)
+            {
+                case 2627:
+                    return (int)EOperationCode.RpcExceptionAlreadyExists;
+                case 2812:
+                    return (int)EOperationCode.RpcExceptionUnimplemented;
+            }
+        }
+
+        return (int)EOperationCode.UnhandledError;
+    }
+
+    protected virtual string GetStatusMessage(Exception ex, string spName)
+    {
+        return $"{spName}: {ex.Message}";
+    }
+}

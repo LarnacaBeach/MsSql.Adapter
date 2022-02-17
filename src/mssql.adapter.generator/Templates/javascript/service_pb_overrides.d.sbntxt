@@ -1,0 +1,202 @@
+﻿/* tslint:disable */
+/* eslint-disable */
+
+import * as service from "./{{ string.downcase Name }}service_pb";
+import * as protobuf_net_bcl_pb from "./protobuf-net/bcl_pb";
+
+{{~
+listedTVP = []
+
+for proc in DbMeta.Procedures
+    baseClassName = GetBaseClassName proc.SpName
+}}
+export declare class {{ baseClassName }}Request extends service.{{ baseClassName }}Request {
+{{~
+    for param in proc.Request
+        memberName = ToProtoCase param.Name
+
+        if param.TVP != null
+            memberType = "TVP" + param.Name
+~}}
+    //@ts-ignore
+    get{{ memberName }}List(): Array<{{ memberType }}>;
+    //@ts-ignore
+    set{{ memberName }}List(value: Array<{{ memberType }}>): {{ baseClassName }}Request;
+    //@ts-ignore
+    add{{ memberName }}(value?: {{ memberType }}, index?: number): {{ memberType }};
+
+{{~
+        else
+            memberType = GetJavascriptFriendlyType param.SqlType
+~}}
+    get{{ memberName}}(): {{ memberType }} | undefined;
+    //@ts-ignore
+    set{{ memberName}}(value?: {{ memberType }}): {{ baseClassName }}Request;
+
+{{~
+        end
+    end
+~}}
+    //@ts-ignore
+    toObject(includeInstance?: boolean): {{ baseClassName }}Request.AsObject;
+    static toObject(includeInstance: boolean, msg: {{ baseClassName }}Request): {{ baseClassName }}Request.AsObject;
+}
+
+export namespace {{ baseClassName }}Request {
+    export type AsObject = {
+{{~
+    for param in proc.Request
+        if param.TVP != null
+            memberType = "Array<TVP" + param.Name + ">"
+        else
+            memberType = GetJavascriptFriendlyType param.SqlType
+        end
+~}}
+        {{ ToProtoCase param.Name | ToLowerFirst }}: {{ memberType }} | undefined;
+{{~
+    end
+~}}
+    }
+}
+{{~
+    for param in proc.Request
+        className = "TVP" + param.Name
+
+        if param.TVP == null || array.contains listedTVP className
+            continue
+        end
+
+        listedTVP = array.add listedTVP className
+}}
+export declare class {{ className }} extends service.{{ className }} {   
+{{~
+        for p in param.TVP
+            memberType = GetJavascriptFriendlyType p.SqlType
+            memberName = ToProtoCase p.Name
+~}}
+    get{{ memberName }}(): {{ memberType }} | undefined;
+    //@ts-ignore
+    set{{ memberName }}(value?: {{ memberType }}): {{ className }};
+
+{{
+        end
+~}}
+    //@ts-ignore
+    toObject(includeInstance?: boolean): {{ className }}.AsObject;
+    static toObject(includeInstance: boolean, msg: {{ className }}): {{ className }}.AsObject;
+}
+
+export namespace {{ className }} {
+    export type AsObject = {
+{{~
+        for p in param.TVP
+            memberType = GetJavascriptFriendlyType p.SqlType
+            memberName = ToProtoCase p.Name | ToLowerFirst
+~}}
+        {{ memberName }}: {{ memberType }} | undefined;
+{{~
+        end
+~}}
+    }
+}
+{{~
+    end
+~}}
+
+
+export declare class {{ baseClassName }}Response extends service.{{ baseClassName }}Response {
+    getStatuscode(): number;
+    //@ts-ignore
+    setStatuscode(value: number): {{ baseClassName }}Response;
+
+    getStatusmessage(): string;
+    //@ts-ignore
+    setStatusmessage(value: string): {{ baseClassName }}Response;
+{{~
+    for param in proc.Responses
+        if param.Order <= 0
+            continue
+        end
+
+        memberType = baseClassName + "Item" + (param.Order - 2)
+        memberName = ToProtoCase param.Name
+}}
+    //@ts-ignore
+    get{{ memberName }}List(): Array<{{ memberType }}>;
+    //@ts-ignore
+    set{{ memberName }}List(value: Array<{{ memberType }}>): {{ baseClassName }}Response;
+    //@ts-ignore
+    add{{ memberName }}(value?: {{ memberType }}, index?: number): {{ memberType }};
+{{~
+    end
+~}}
+
+    //@ts-ignore
+    toObject(includeInstance?: boolean): {{ baseClassName }}Response.AsObject;
+    static toObject(includeInstance: boolean, msg: {{ baseClassName }}Response): {{ baseClassName }}Response.AsObject;
+}
+
+export namespace {{ baseClassName }}Response {
+    export type AsObject = {
+        statuscode: number,
+        statusmessage: string,
+{{~
+    for param in proc.Responses
+        if param.Order <= 0
+            continue
+        end
+
+        memberType = baseClassName + "Item" + (param.Order - 2)
+        memberName = ToProtoCase param.Name | ToLowerFirst
+~}}
+        {{ memberName}}: Array<{{ memberType }}>;
+{{~
+    end
+~}}
+    }
+}
+
+{{~
+    for param in proc.Responses
+        if param.Order <= 0
+            continue
+        end
+
+        responseParamClassName = baseClassName + "Item" + (param.Order - 2)
+}}
+export declare class {{ responseParamClassName }} extends service.{{ responseParamClassName }} {
+{{~
+        for p in param.Params
+            memberType = GetJavascriptFriendlyType p.SqlType
+            memberName = ToProtoCase p.Name
+~}}
+    get{{ memberName}}(): {{ memberType }} | undefined;
+    //@ts-ignore
+    set{{ memberName}}(value?: {{ memberType }}): {{ responseParamClassName }};
+
+{{~
+        end
+~}}
+    //@ts-ignore
+    toObject(includeInstance?: boolean): {{ responseParamClassName }}.AsObject;
+    static toObject(includeInstance: boolean, msg: {{ responseParamClassName }}): {{ responseParamClassName }}.AsObject;
+}
+
+export namespace {{ responseParamClassName }} {
+    export type AsObject = {
+{{~
+        for p in param.Params
+            memberType = GetJavascriptFriendlyType p.SqlType
+            memberName = ToProtoCase p.Name | ToLowerFirst
+~}}
+        {{ memberName}}: {{ memberType }} | undefined;
+{{~
+        end
+~}}
+    }
+}
+
+{{~
+    end
+end
+~}}

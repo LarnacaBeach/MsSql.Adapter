@@ -1,0 +1,86 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<LangVersion>Latest</LangVersion>
+	<!-- Do not include the generator as a lib dependency -->
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>true</ImplicitUsings>
+    <PackageId>Mssql.Adapter.Generator</PackageId>
+    <Authors>https://github.com/LarnacaBeach/mssql.adapter/ (⌐■_■)</Authors>
+    <Description>A source generator for creating mssql adapter from dotnet-mssql-collector result.json</Description>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+	<PackageTags>dotnet, Generator</PackageTags>
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
+	<PackOnBuild>true</PackOnBuild>
+	<!-- Generates a package at build -->
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	<PackFolder>analyzers\cs</PackFolder>
+	<DebugType>embedded</DebugType>
+	<DebugSymbols>true</DebugSymbols>
+    <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
+	<NoWarn>$(NoWarn);RS2000</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+	<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.0.1" PrivateAssets="all" />
+    <PackageReference Include="Scriban" Version="5.4.0" IncludeAssets="build" PrivateAssets="all" />
+	<PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="6.0.0" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Buffers" Version="4.5.1" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Memory" Version="4.5.4" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Numerics.Vectors" Version="4.5.0" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Include="System.Text.Json" Version="6.0.2" GeneratePathProperty="true" PrivateAssets="all" />
+	<ProjectReference Include="..\shared\mssql.collector.types\mssql.collector.types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
+	<ProjectReference Include="..\mssql.adapter.generator.attributes\mssql.adapter.generator.attributes.csproj" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!--
+	Workaround for transient dependencies when including generator project in another project:
+	https://github.com/dotnet/roslyn/discussions/47517#discussioncomment-1633510
+	https://turnerj.com/blog/the-pain-points-of-csharp-source-generators#potential-transient-dependency-workaround
+  -->	
+  <PropertyGroup>
+    <GetTargetPathDependsOn>$(GetTargetPathDependsOn);GetDependencyTargetPaths</GetTargetPathDependsOn>
+  </PropertyGroup>
+
+  <Target Name="GetDependencyTargetPaths" AfterTargets="ResolvePackageAssets">
+    <ItemGroup>
+      <!--<TargetPathWithTargetPlatformMoniker Include="@(ResolvedCompileFileDefinitions)" IncludeRuntimeDependency="false" />-->
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Text_Json)\lib\netstandard2.0\System.Text.Json.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Text_Encodings_Web)\lib\netstandard2.0\System.Text.Encodings.Web.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Buffers)\lib\netstandard2.0\System.Buffers.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Memory)\lib\netstandard2.0\System.Memory.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Numerics_Vectors)\lib\netstandard2.0\System.Numerics.Vectors.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Runtime_CompilerServices_Unsafe)\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Threading_Tasks_Extensions)\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Include="$(PKGMicrosoft_Bcl_AsyncInterfaces)\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+
+  <ItemGroup>
+	<!-- Embed the templates in the dll -->
+    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbncs'))" />
+    <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
+    <None Include="README.md" Pack="true" PackagePath="\" />
+    <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
+    <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
+	<!-- Package the generator in the analyzer directory of the nuget package -->
+    <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	  <!-- Package the generator attributes in the analyzer directory of the nuget package -->
+	<None Include="$(OutputPath)\mssql.adapter.generator.attributes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	  <!-- Package the generator attributes in the lib directory of the nuget package and expose it to the project that references the generator -->
+	<None Include="$(OutputPath)\mssql.adapter.generator.attributes.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
+	<None Include="$(OutputPath)\mssql.collector.types.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+  </ItemGroup>
+</Project>

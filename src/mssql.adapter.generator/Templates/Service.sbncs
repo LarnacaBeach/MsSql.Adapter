@@ -1,0 +1,228 @@
+﻿using System.Data;
+using System.Data.SqlClient;
+using mssql.utils;
+using standard.types;
+using {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
+
+namespace {{ Namespace }};
+
+public partial class {{ Name }}Service : {{ Name }}ServiceBase, I{{ Name }}Service
+{
+    public {{ Name }}Service(IServiceProvider serviceProvider) : base(serviceProvider)
+    {
+    }
+
+    public static string GetProto()
+    {
+        var generator = new ProtoBuf.Grpc.Reflection.SchemaGenerator
+        {
+            ProtoSyntax = ProtoBuf.Meta.ProtoSyntax.Proto3
+        };
+        
+        return generator.GetSchema<I{{ Name }}Service>();
+    }
+{{~
+for proc in DbMeta.Procedures
+    baseClassName = GetBaseClassName proc.SpName
+    responseClass = baseClassName + "Response"
+}}
+    public async Task<{{ responseClass}}> {{ baseClassName }} ({{ baseClassName }}Request req)
+    {
+        try
+        {  
+            using (var dr = new DataReader(_connectionString, _credential))
+            {
+                #region generate sql command..
+                using (var cmd = new SqlCommand { CommandText = "{{ proc.SpName }}" })
+                {
+{{~
+    for p in proc.Request
+        if p.TVP != null
+}}             
+                    var dt_{{ p.Name }} = new DataTable();
+
+                    #region add datatable columns..
+{{~
+            for x in p.TVP
+~}}
+                    dt_{{ p.Name }}.Columns.Add("{{ x.Name }}", typeof({{ GetBaseCSharpType x.SqlType }}));
+{{~
+            end
+~}}
+                    #endregion 
+                    #region  add rows..
+                    if (req.{{ ToPascalCase p.Name }} != null)
+                    {
+                        foreach (var item in req.{{ ToPascalCase p.Name }})
+                        {
+                            var row = dt_{{ p.Name }}.NewRow(); 
+
+{{~
+            for x in p.TVP
+~}}
+                            if (item.{{ ToPascalCase x.Name }} == null)
+                            {
+                                row["{{ x.Name }}"] = DBNull.Value;
+                            }
+                            else
+                            {
+                                row["{{ x.Name }}"] = item.{{ ToPascalCase x.Name }};
+                            }
+{{~
+            end
+~}}
+
+                            dt_{{ p.Name }}.Rows.Add(row);
+                        }
+                    }
+                    #endregion 
+
+                    cmd.Parameters.Add(new SqlParameter
+                    {
+                        Direction = ParameterDirection.Input,
+                        ParameterName = @"{{ p.Name }}",
+                        SqlDbType = SqlDbType.Structured,
+                        Value = dt_{{ p.Name }}
+                    });
+{{~
+        else
+~}}
+                    if (req.{{ ToPascalCase p.Name }} == null)
+                    {
+                        cmd.Parameters.Add(new SqlParameter
+                        {
+                            Direction = ParameterDirection.Input,
+                            ParameterName = @"{{ p.Name }}",
+                            SqlDbType = SqlDbType.{{ GetSqlDbType p.SqlType }},
+                            Value = DBNull.Value
+                        });
+                    }
+                    else
+                    {
+                        cmd.Parameters.Add(new SqlParameter
+                        {
+                            Direction = ParameterDirection.Input,
+                            ParameterName = @"{{ p.Name }}",
+                            SqlDbType = SqlDbType.{{ GetSqlDbType p.SqlType }},
+                            Value = req.{{ ToPascalCase p.Name }}
+                        });
+                    }
+{{
+        end
+    end
+}}
+                    await dr.ExecuteSpAsync(cmd).ConfigureAwait(false);
+                } 
+                #endregion
+
+                var resp = new {{ responseClass }}{ StatusCode = (int)EOperationCode.Ok };
+{{~
+    totalResponses = (array.size proc.Responses) - 1
+
+    if totalResponses >= 0
+~}}
+                List<string> errors;
+                DataReaderColumnDefinition[] columnDef;
+{{~
+    end
+
+    for $i in 0..totalResponses
+        p = proc.Responses[$i]
+
+        if p == null
+            break
+        end
+
+        if $i == 0 && p.IsOperationResult
+}}
+                #region OperationResult..
+                columnDef = new DataReaderColumnDefinition[] {
+                    new DataReaderColumnDefinition("StatusCode", typeof(int)),
+                    new DataReaderColumnDefinition("StatusMessage", typeof(string))
+                };
+                errors = dr.ValidateColumns(columnDef, false);
+            
+                if (errors.Any())
+                {
+                    return new {{ responseClass }} { StatusCode = (int)EOperationCode.Error, StatusMessage = string.Join("\r\n",errors) };
+                }
+
+                await dr.ReadAsync().ConfigureAwait(false);
+
+                resp.StatusCode = dr.GetInt32(columnDef[0].Order) ?? (int)EOperationCode.Error;
+                resp.StatusMessage = dr.GetString(columnDef[1].Order);
+
+                if (resp.StatusCode != (int)EOperationCode.Ok)
+                {
+                    return resp;
+                }
+                #endregion
+{{
+        else
+}}
+                #region  {{ p.Name }}..
+{{~
+            if $i > 0
+~}}
+                await dr.NextResultAsync().ConfigureAwait(false);
+{{~
+            end
+~}}
+                //build columdef
+                columnDef = new DataReaderColumnDefinition[] {
+{{~
+            totalParams = (array.size p.Params) - 1
+
+            for $j in 0..totalParams
+                x = p.Params[$j]
+~}}
+                    new DataReaderColumnDefinition("{{ x.Name }}", typeof({{ GetCSharpFriendlyType x.SqlType }})){{ if $j < totalParams }},{{ end }}
+{{~
+            end
+~}}
+                };
+                errors = dr.ValidateColumns(columnDef, false);
+
+                if (errors.Any())
+                {
+                    return new {{ responseClass }} { StatusCode = (int)EOperationCode.Error, StatusMessage = string.Join("\r\n",errors) };
+                } 
+        
+                resp.{{ p.Name }} = new(); 
+
+                while(await dr.ReadAsync().ConfigureAwait(false))
+                {
+                    resp.{{ p.Name }}.Add(new {{ responseClass }}.{{ baseClassName }}Item{{ p.Order-2 }}
+                    {
+{{~
+            for $k in 0..totalParams
+                x = p.Params[$k]
+                columnOrder = "columnDef[" + $k + "].Order"
+~}}
+                        {{ ToPascalCase x.Name }} = (columnDef[{{ $k }}].Order >= 0 ? {{ GenerateDataRowReadValue x.SqlType columnOrder }} : default){{ if $k < totalParams }},{{ end }}
+{{~
+            end
+~}}
+                    });
+                }
+                #endregion
+{{~
+        end
+    end
+~}}
+
+                return resp;
+            }
+        }
+        catch(Exception ex)
+        {
+            LogException(ex, "{{ proc.SpName }}");
+
+            return new {{ responseClass }} {
+                StatusCode = GetStatusCode(ex, "{{ proc.SpName }}"),
+                StatusMessage = GetStatusMessage(ex, "{{ proc.SpName }}")
+            };    
+        }
+    }
+{{~ end ~}}
+}

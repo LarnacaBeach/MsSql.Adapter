@@ -1,0 +1,11 @@
+﻿/* tslint:disable */
+/* eslint-disable */
+
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const {{ string.downcase Name }}service_grpc_pb = __importDefault(require("./{{ string.downcase Name }}service_grpc_pb"));
+
+exports.{{ ToPascalCase DbMeta.Name }}ServiceClient = {{ string.downcase Name }}service_grpc_pb.default.{{ ToPascalCase DbMeta.Name }}ServiceClient;

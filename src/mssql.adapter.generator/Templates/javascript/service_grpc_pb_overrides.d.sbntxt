@@ -1,0 +1,21 @@
+﻿/* tslint:disable */
+/* eslint-disable */
+
+import * as grpc from "@grpc/grpc-js";
+import * as service_grpc from "./{{ string.downcase Name }}service_grpc_pb";
+import * as service_pb_overrides from "./{{ string.downcase Name }}service_pb_overrides";
+
+export class {{ ToPascalCase DbMeta.Name }}ServiceClient extends service_grpc.{{ ToPascalCase DbMeta.Name }}ServiceClient {
+{{~
+for proc in DbMeta.Procedures
+    baseClassName = GetBaseClassName proc.SpName
+    methodName = ToLowerFirst baseClassName
+}}
+    //@ts-ignore
+    public {{ methodName }}(request: service_pb_overrides.{{ baseClassName }}Request, callback: (error: grpc.ServiceError | null, response: service_pb_overrides.{{ baseClassName }}Response) => void): grpc.ClientUnaryCall;
+    //@ts-ignore
+    public {{ methodName }}(request: service_pb_overrides.{{ baseClassName }}Request, metadata: grpc.Metadata, callback: (error: grpc.ServiceError | null, response: service_pb_overrides.{{ baseClassName }}Response) => void): grpc.ClientUnaryCall;
+    //@ts-ignore
+    public {{ methodName }}(request: service_pb_overrides.{{ baseClassName }}Request, metadata: grpc.Metadata, options: Partial<grpc.CallOptions>, callback: (error: grpc.ServiceError | null, response: service_pb_overrides.{{ baseClassName }}Response) => void): grpc.ClientUnaryCall;
+{{~ end ~}}
+}
