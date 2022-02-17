@@ -19,11 +19,12 @@ This adds a `<PackageReference>` to your project. You can additionally mark the 
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
-	<LangVersion>Latest</LangVersion>
+    <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
   <!-- Add the package -->~~~~
-  <PackageReference Include="mssql.adapter.generator" Version="1.0.0" PrivateAssets="all" ExcludeAssets="runtime" />
+  <PackageReference Include="mssql.adapter.generator" Version="1.0.0"
+    PrivateAssets="all" ExcludeAssets="runtime" />
   <!-- -->
 
 </Project>
