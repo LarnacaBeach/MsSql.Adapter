@@ -37,7 +37,7 @@ namespace mssql.adapter.helpers
 
         public static void ConfigureMiddleware(IApplicationBuilder app, IServiceProvider services)
         {
-            app.UseSerilogRequestLogging();
+            app.UseSerilogRequestLogging(opts => opts.EnrichDiagnosticContext = LogHelper.EnrichFromRequest);
             app.UseRouting();
             app.UseGrpcWeb(new GrpcWebOptions
             {
