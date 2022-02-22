@@ -1,5 +1,6 @@
 ﻿using Microsoft.Net.Http.Headers;
 using Serilog;
+using System.Web;
 
 namespace mssql.adapter.helpers;
 
@@ -47,7 +48,7 @@ public static class LogHelper
                         continue;
                     }
 
-                    diagnosticContext.Set(key, value);
+                    diagnosticContext.Set(key, HttpUtility.UrlDecode(value));
                 }
             }
         }
