@@ -9,7 +9,6 @@
     <PackageId>Mssql.Adapter.Generator</PackageId>
     <Authors>https://github.com/LarnacaBeach/mssql.adapter/ (⌐■_■)</Authors>
     <Description>A source generator for creating mssql adapter from dotnet-mssql-collector result.json</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageTags>dotnet, Generator</PackageTags>
@@ -72,7 +71,6 @@
 	<!-- Embed the templates in the dll -->
     <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbncs'))" />
     <EmbeddedResource Include="@(None -&gt; WithMetadataValue('Extension', '.sbntxt'))" />
-    <None Include="README.md" Pack="true" PackagePath="\" />
     <AdditionalFiles Include="AnalyzerReleases.Shipped.md" />
     <AdditionalFiles Include="AnalyzerReleases.Unshipped.md" />
 	<!-- Package the generator in the analyzer directory of the nuget package -->
