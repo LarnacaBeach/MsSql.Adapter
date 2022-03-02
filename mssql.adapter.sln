@@ -9,8 +9,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mssql.adapter.generator", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mssql.adapter.generator.attributes", "src\mssql.adapter.generator.attributes\mssql.adapter.generator.attributes.csproj", "{0CD73A5B-6DC0-460D-AA8D-1BF7AC5DC5DF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "collection.extensions", "src\shared\collection.extensions\collection.extensions.csproj", "{4CD3B543-B3CF-4BD0-9B4C-769440109D94}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "mssql.collector.types", "src\shared\mssql.collector.types\mssql.collector.types.csproj", "{988150BC-206E-4ECE-91C7-8D14394EF6F4}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "shared", "shared", "{0C8692DA-3A2F-4F1D-9799-BE8BC6F8F5DC}"
@@ -37,10 +35,6 @@ Global
 		{0CD73A5B-6DC0-460D-AA8D-1BF7AC5DC5DF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CD73A5B-6DC0-460D-AA8D-1BF7AC5DC5DF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CD73A5B-6DC0-460D-AA8D-1BF7AC5DC5DF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4CD3B543-B3CF-4BD0-9B4C-769440109D94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4CD3B543-B3CF-4BD0-9B4C-769440109D94}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4CD3B543-B3CF-4BD0-9B4C-769440109D94}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4CD3B543-B3CF-4BD0-9B4C-769440109D94}.Release|Any CPU.Build.0 = Release|Any CPU
 		{988150BC-206E-4ECE-91C7-8D14394EF6F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{988150BC-206E-4ECE-91C7-8D14394EF6F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{988150BC-206E-4ECE-91C7-8D14394EF6F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -58,7 +52,6 @@ Global
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
-		{4CD3B543-B3CF-4BD0-9B4C-769440109D94} = {0C8692DA-3A2F-4F1D-9799-BE8BC6F8F5DC}
 		{988150BC-206E-4ECE-91C7-8D14394EF6F4} = {0C8692DA-3A2F-4F1D-9799-BE8BC6F8F5DC}
 		{75F66AB2-63C0-4189-B8A5-18FD483F5D86} = {0C8692DA-3A2F-4F1D-9799-BE8BC6F8F5DC}
 		{B78B7BC0-46DB-4867-AD24-5A4F474EA499} = {0C8692DA-3A2F-4F1D-9799-BE8BC6F8F5DC}

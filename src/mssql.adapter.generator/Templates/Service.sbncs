@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using Grpc.Core;
+using System.Data;
 using System.Data.SqlClient;
 using mssql.utils;
 using standard.types;
@@ -218,10 +219,7 @@ for proc in DbMeta.Procedures
         {
             LogException(ex, "{{ proc.SpName }}");
 
-            return new {{ responseClass }} {
-                StatusCode = GetStatusCode(ex, "{{ proc.SpName }}"),
-                StatusMessage = GetStatusMessage(ex, "{{ proc.SpName }}")
-            };    
+            throw new RpcException(new Status(GetStatusCode(ex, "{{ proc.SpName }}"), GetStatusMessage(ex, "{{ proc.SpName }}")));  
         }
     }
 {{~ end ~}}

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -49,22 +48,14 @@ namespace mssql.utils
             {
                 DbConnection = new SqlConnection(_connectionString, _credential);
 
-                var stopwatch1 = Stopwatch.StartNew();
                 await DbConnection.OpenAsync().ConfigureAwait(false);
-                stopwatch1.Stop();
-
-                MetricsEventSource.Instance.RecordMetric("db connection open", stopwatch1.ElapsedMilliseconds);
             }
 
             cmd.Connection = DbConnection;
             cmd.CommandTimeout = timeout;
             cmd.CommandType = CommandType.StoredProcedure;
 
-            var stopwatch = Stopwatch.StartNew();
             Reader = await cmd.ExecuteReaderAsync().ConfigureAwait(false);
-            stopwatch.Stop();
-
-            MetricsEventSource.Instance.RecordMetric(cmd.CommandText, stopwatch.ElapsedMilliseconds);
         }
 
         public void Execute(SqlCommand cmd)
@@ -73,20 +64,22 @@ namespace mssql.utils
             cmd.Connection = DbConnection;
             Reader = cmd.ExecuteReader();
         }
+
         public Task<bool> ReadAsync()
         {
             return Reader.ReadAsync();
         }
+
         public Task<bool> NextResultAsync()
         {
             return Reader.NextResultAsync();
         }
 
-        public List<string>  ValidateColumns(DataReaderColumnDefinition[] columns, bool strict)
+        public List<string> ValidateColumns(DataReaderColumnDefinition[] columns, bool strict)
         {
             var drColumns = new HashSet<string>();
-            var missingColumns = new HashSet<string>(); 
-           
+            var missingColumns = new HashSet<string>();
+
             for (int i = 0; i < Reader.FieldCount; i++)
             {
                 drColumns.Add(Reader.GetName(i));
@@ -132,6 +125,7 @@ namespace mssql.utils
             }
             return errors;
         }
+
         public void CheckFieldType(string columnName, Type type, StringBuilder sb)
         {
             var rowType = Reader.GetFieldType(Reader.GetOrdinal(columnName));
@@ -140,10 +134,12 @@ namespace mssql.utils
                 sb.Append($"[{columnName}] Expects:{type.FullName} row:{rowType.FullName}");
             };
         }
+
         public int GetOrdinal(string key)
         {
             return Reader.GetOrdinal(key);
         }
+
         public byte[] GetBytes(int ordinal)
         {
             byte[] result = null;
@@ -234,8 +230,6 @@ namespace mssql.utils
         {
             return Reader.IsDBNull(ordinal) ? (decimal?)null : (decimal)Reader.GetSqlMoney(ordinal);
         }
-
-
 
         #region >>>dispose...
 

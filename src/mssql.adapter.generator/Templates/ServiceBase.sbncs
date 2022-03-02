@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Grpc.Core;
+using Microsoft.Extensions.Options;
 using System.Data.SqlClient;
 using System.Security;
 using standard.types;
@@ -37,20 +38,20 @@ public partial class {{ Name }}ServiceBase
         _logger.LogError(ex, @"{spName} failed: {message}", spName, ex.Message);
     }
 
-    protected virtual int GetStatusCode(Exception ex, string spName)
+    protected virtual StatusCode GetStatusCode(Exception ex, string spName)
     {
         if (ex is SqlException sqlEx)
         {
             switch (sqlEx.Number)
             {
                 case 2627:
-                    return (int)EOperationCode.RpcExceptionAlreadyExists;
+                    return StatusCode.AlreadyExists;
                 case 2812:
-                    return (int)EOperationCode.RpcExceptionUnimplemented;
+                    return StatusCode.Unimplemented;
             }
         }
 
-        return (int)EOperationCode.UnhandledError;
+        return StatusCode.Unknown;
     }
 
     protected virtual string GetStatusMessage(Exception ex, string spName)

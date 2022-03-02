@@ -13,11 +13,5 @@ namespace mssql.adapter
 
         [DataMember(Order = 3)]
         public string? ConnectionPassword { get; set; }
-
-        [DataMember(Order = 4)]
-        public int MetricsLogInterval { get; set; } = 15;
-
-        [DataMember(Order = 5)]
-        public int MetricsLogDurationThreshold { get; set; } = 50;
     }
 }

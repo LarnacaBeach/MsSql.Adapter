@@ -24,8 +24,7 @@ namespace mssql.adapter.helpers
             services
                 .Configure<DalServiceOptions>(configuration.GetSection(nameof(DalServiceOptions)))
                 .AddOptions()
-                .AddHostedService<MetricsCollectionService>()
-                .AddTransient<DalService>();
+                .AddSingleton<DalService>();
 
             services.AddCodeFirstGrpc(config =>
             {

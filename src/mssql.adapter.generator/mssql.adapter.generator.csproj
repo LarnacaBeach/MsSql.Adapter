@@ -7,16 +7,15 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>true</ImplicitUsings>
     <PackageId>Mssql.Adapter.Generator</PackageId>
-    <Authors>https://github.com/LarnacaBeach/mssql.adapter/ (⌐■_■)</Authors>
     <Description>A source generator for creating mssql adapter from dotnet-mssql-collector result.json</Description>
-	<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
 	<PackageTags>dotnet, Generator</PackageTags>
+    <Authors>LarnacaBeach Contributors</Authors>
+    <RepositoryUrl>https://github.com/LarnacaBeach/mssql.adapter.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
-	<GenerateRepositoryUrlAttribute>true</GenerateRepositoryUrlAttribute>
-	<PackOnBuild>true</PackOnBuild>
-	<!-- Generates a package at build -->
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 	<PackFolder>analyzers\cs</PackFolder>
 	<DebugType>embedded</DebugType>
 	<DebugSymbols>true</DebugSymbols>
