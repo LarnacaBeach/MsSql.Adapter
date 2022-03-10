@@ -1,5 +1,10 @@
 # MsSql.Adapter.Generator
 
+![Build status](https://github.com/LarnacaBeach/MsSql.Adapter/actions/workflows/BuildAndPack.yml/badge.svg)
+[![NuGet](https://img.shields.io/nuget/v/MsSql.Adapter.Generator.svg)](https://www.nuget.org/packages/MsSql.Adapter.Generator/)
+[![License](https://img.shields.io/github/license/LarnacaBeach/MsSql.Adapter.svg)](https://github.com/LarnacaBeach/MsSql.Adapter/blob/main/LICENSE)
+
+
 A Source Generator package that generates methods for a class, including associated request & response classes, based on the `result.json` file created by [dotnet-mssql-collector](https://github.com/LarnacaBeach/MsSql.Adapter/tree/main/src/MsSql.Adapter.Collector) tool.
 
 > This source generator requires the .NET 6 SDK. You can target earlier frameworks like .NET Core 3.1 etc, but the _SDK_ must be at least 6.0.100
