@@ -1,5 +1,10 @@
 # MsSql.Adapter.Collector
 
+![Build status](https://github.com/LarnacaBeach/MsSql.Adapter/actions/workflows/BuildAndPack.yml/badge.svg)
+[![NuGet](https://img.shields.io/nuget/v/MsSql.Adapter.Collector.svg)](https://www.nuget.org/packages/MsSql.Adapter.Collector/)
+[![License](https://img.shields.io/github/license/LarnacaBeach/MsSql.Adapter.svg)](https://github.com/LarnacaBeach/MsSql.Adapter/blob/main/LICENSE)
+
+
 This tool will collect information about all the stored procedures in a database and store the results in a `result.json` file.
 
 ## Use the tool as a global tool
