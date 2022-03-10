@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
-using mssql.adapter;
-using mssql.adapter.helpers;
+using MsSql.Adapter;
+using MsSql.Adapter.helpers;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);

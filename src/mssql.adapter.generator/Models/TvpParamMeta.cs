@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace mssql.adapter.generator.Models;
+namespace MsSql.Adapter.Generator.Models;
 
 [DataContract]
 public class TvpParamMeta
@@ -17,7 +17,7 @@ public class TvpParamMeta
     [DataMember(Order = 4)]
     public int Order { get; set; }
 
-    public TvpParamMeta(collector.types.TvpParamMeta tvpParamMeta)
+    public TvpParamMeta(Collector.Types.TvpParamMeta tvpParamMeta)
     {
         Name = tvpParamMeta.Name;
         SqlType = tvpParamMeta.SqlType;

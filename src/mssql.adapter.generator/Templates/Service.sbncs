@@ -1,8 +1,8 @@
 ﻿using Grpc.Core;
 using System.Data;
 using System.Data.SqlClient;
-using mssql.utils;
-using standard.types;
+using MsSql.Adapter.Utils;
+using MsSql.Adapter.Standard.Types;
 using {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
 
 namespace {{ Namespace }};
@@ -151,7 +151,7 @@ for proc in DbMeta.Procedures
                 await dr.ReadAsync().ConfigureAwait(false);
 
                 resp.StatusCode = dr.GetInt32(columnDef[0].Order) ?? (int)EOperationCode.Error;
-                resp.StatusMessage = dr.GetString(columnDef[1].Order);
+                resp.StatusMessage = dr.GetString(columnDef[1].Order) ?? string.Empty;
 
                 if (resp.StatusCode != (int)EOperationCode.Ok)
                 {

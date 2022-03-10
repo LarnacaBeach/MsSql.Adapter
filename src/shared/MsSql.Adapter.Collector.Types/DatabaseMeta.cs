@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace mssql.collector.types
+namespace MsSql.Collector.Types
 {
     [Serializable]
     [DataContract]
     public class DatabaseMeta
     {
         [DataMember(Order = 1)]
-        public string Name;
+        public string Name { get; set; } = string.Empty;
 
         [DataMember(Order = 2)]
-        public ProcedureMeta[] Procedures;
+        public ProcedureMeta[] Procedures { get; set; } = new ProcedureMeta[0];
     }
 }

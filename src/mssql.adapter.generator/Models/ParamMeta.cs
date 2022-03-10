@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Runtime.Serialization;
 
-namespace mssql.adapter.generator.Models;
+namespace MsSql.Adapter.Generator.Models;
 
 [DataContract]
 public class ParamMeta
@@ -24,7 +24,7 @@ public class ParamMeta
     [DataMember(Order = 5)]
     public int TVPMaxOrder { get; set; }
 
-    public ParamMeta(collector.types.ParamMeta paramMeta)
+    public ParamMeta(Collector.Types.ParamMeta paramMeta)
     {
         Name = paramMeta.Name;
         SqlType = paramMeta.SqlType;

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace mssql.utils
+namespace MsSql.Adapter.Utils
 {
     public class DataReaderColumnDefinition
     {

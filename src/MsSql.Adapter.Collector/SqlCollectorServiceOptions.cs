@@ -1,4 +1,4 @@
-﻿namespace mssql.collector
+﻿namespace MsSql.Collector
 {
     public class SqlCollectorServiceOptions
     {

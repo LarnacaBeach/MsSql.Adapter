@@ -39,8 +39,8 @@
 	<PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" GeneratePathProperty="true" PrivateAssets="all" />
 	<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" GeneratePathProperty="true" PrivateAssets="all" />
 	<PackageReference Include="System.Text.Json" Version="6.0.2" GeneratePathProperty="true" PrivateAssets="all" />
-	<ProjectReference Include="..\shared\mssql.collector.types\mssql.collector.types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
-	<ProjectReference Include="..\mssql.adapter.generator.attributes\mssql.adapter.generator.attributes.csproj" PrivateAssets="All" />
+	<ProjectReference Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
+	<ProjectReference Include="..\MsSql.Adapter.Generator.Attributes\MsSql.Adapter.Generator.Attributes.csproj" PrivateAssets="All" />
   </ItemGroup>
 
   <!--
@@ -75,9 +75,9 @@
 	<!-- Package the generator in the analyzer directory of the nuget package -->
     <None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	  <!-- Package the generator attributes in the analyzer directory of the nuget package -->
-	<None Include="$(OutputPath)\mssql.adapter.generator.attributes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	<None Include="$(OutputPath)\MsSql.Adapter.Generator.Attributes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	  <!-- Package the generator attributes in the lib directory of the nuget package and expose it to the project that references the generator -->
-	<None Include="$(OutputPath)\mssql.adapter.generator.attributes.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
-	<None Include="$(OutputPath)\mssql.collector.types.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	<None Include="$(OutputPath)\MsSql.Adapter.Generator.Attributes.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
+	<None Include="$(OutputPath)\MsSql.Adapter.Collector.Types.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 </Project>

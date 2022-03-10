@@ -1,9 +1,9 @@
-﻿using mssql.collector.types;
+﻿using MsSql.Collector.Types;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace mssql.adapter.generator.helpers
+namespace MsSql.Adapter.Generator.helpers
 {
     public static class DalHelper
     {

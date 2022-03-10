@@ -1,15 +1,15 @@
-﻿namespace standard.types
+﻿namespace MsSql.Adapter.Standard.Types
 {
     public interface IOperationResult
     {
         int StatusCode { get; set; }
-        string StatusMessage { get; set; }
+        string? StatusMessage { get; set; }
 
         bool Fail();
     }
 
     public interface IOperationResult<T> : IOperationResult
     {
-        T Data { get; set; }
+        T? Data { get; set; }
     }
 }

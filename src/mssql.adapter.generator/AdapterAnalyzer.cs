@@ -3,7 +3,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Diagnostics;
 
-namespace mssql.adapter.generator
+namespace MsSql.Adapter.Generator
 {
     [DiagnosticAnalyzer(LanguageNames.CSharp)]
     public class AdapterAnalyzer : DiagnosticAnalyzer

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
-using mssql.collector.types;
-using mssql.utils;
+using MsSql.Collector.Types;
+using MsSql.Adapter.Utils;
 using Newtonsoft.Json;
-using standard.types;
+using MsSql.Adapter.Standard.Types;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -14,7 +14,7 @@ using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace mssql.collector
+namespace MsSql.Collector
 {
     public class SqlCollectorService
     {

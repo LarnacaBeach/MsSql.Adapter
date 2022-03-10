@@ -1,11 +1,11 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using mssql.adapter.generator.helpers;
-using mssql.adapter.generator.models;
+using MsSql.Adapter.Generator.helpers;
+using MsSql.Adapter.Generator.models;
 using System.Collections.Immutable;
 
-namespace mssql.adapter.generator;
+namespace MsSql.Adapter.Generator;
 
 [Generator]
 public class AdapterGenerator : IIncrementalGenerator

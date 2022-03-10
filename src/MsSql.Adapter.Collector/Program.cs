@@ -7,7 +7,7 @@ using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
 
-namespace mssql.collector
+namespace MsSql.Collector
 {
     internal class Program
     {

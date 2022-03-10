@@ -2,7 +2,7 @@
 using Serilog;
 using System.Web;
 
-namespace mssql.adapter.helpers;
+namespace MsSql.Adapter.helpers;
 
 public static class LogHelper
 {

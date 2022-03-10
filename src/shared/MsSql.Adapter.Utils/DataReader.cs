@@ -5,28 +5,29 @@ using System.Data.SqlClient;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace mssql.utils
+namespace MsSql.Adapter.Utils
 {
     public sealed class DataReader : IDisposable
     {
-        private string _connectionString = null;
-        private SqlCredential _credential = null;
+        private string? _connectionString = null;
+        private SqlCredential? _credential = null;
 
-        private SqlConnection DbConnection { get; set; }
+        private SqlConnection? DbConnection { get; set; }
 
-        public SqlDataReader Reader { get; private set; }
+        public SqlDataReader? Reader { get; private set; }
 
-        public DataReader(string connectionString, SqlCredential credential)
+        public DataReader(string connectionString, SqlCredential? credential)
         {
             if (string.IsNullOrEmpty(connectionString))
             {
-                throw (new Exception("connectionString is null"));
+                throw (new InvalidOperationException("connectionString was not set"));
             }
+
             _connectionString = connectionString;
             _credential = credential;
         }
 
-        private void InitDB()
+        private SqlConnection GetDbConnection()
         {
             if (DbConnection == null)
             {
@@ -34,12 +35,13 @@ namespace mssql.utils
 
                 DbConnection.Open();
             }
+
+            return DbConnection;
         }
 
         public DataTable GetSchema(string collection, string[] restrictionValues)
         {
-            InitDB();
-            return DbConnection.GetSchema(collection, restrictionValues);
+            return GetDbConnection().GetSchema(collection, restrictionValues);
         }
 
         public async Task ExecuteSpAsync(SqlCommand cmd, int timeout = 30)
@@ -60,23 +62,37 @@ namespace mssql.utils
 
         public void Execute(SqlCommand cmd)
         {
-            InitDB();
-            cmd.Connection = DbConnection;
+            cmd.Connection = GetDbConnection();
             Reader = cmd.ExecuteReader();
         }
 
         public Task<bool> ReadAsync()
         {
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
             return Reader.ReadAsync();
         }
 
         public Task<bool> NextResultAsync()
         {
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
             return Reader.NextResultAsync();
         }
 
         public List<string> ValidateColumns(DataReaderColumnDefinition[] columns, bool strict)
         {
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
             var drColumns = new HashSet<string>();
             var missingColumns = new HashSet<string>();
 
@@ -128,6 +144,11 @@ namespace mssql.utils
 
         public void CheckFieldType(string columnName, Type type, StringBuilder sb)
         {
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
             var rowType = Reader.GetFieldType(Reader.GetOrdinal(columnName));
             if (rowType != type)
             {
@@ -137,14 +158,24 @@ namespace mssql.utils
 
         public int GetOrdinal(string key)
         {
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
             return Reader.GetOrdinal(key);
         }
 
-        public byte[] GetBytes(int ordinal)
+        public byte[]? GetBytes(int ordinal)
         {
-            byte[] result = null;
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
 
-            if (!(Reader?.IsDBNull(ordinal) ?? false))
+            byte[]? result = null;
+
+            if (!Reader.IsDBNull(ordinal))
             {
                 long size = Reader.GetBytes(ordinal, 0, null, 0, 0); //get the length of data
                 result = new byte[size];
@@ -163,72 +194,142 @@ namespace mssql.utils
 
         public byte? GetByte(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (byte?)null : Reader.GetByte(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetByte(ordinal);
         }
 
         public bool? GetBoolean(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (bool?)null : Reader.GetBoolean(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetBoolean(ordinal);
         }
 
         public short? GetInt16(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (short?)null : Reader.GetInt16(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetInt16(ordinal);
         }
 
         public int? GetInt32(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (int?)null : Reader.GetInt32(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetInt32(ordinal);
         }
 
         public long? GetInt64(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (long?)null : Reader.GetInt64(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetInt64(ordinal);
         }
 
         public Guid? GetGuid(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (Guid?)null : Reader.GetGuid(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetGuid(ordinal);
         }
 
         public float? GetFloat(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (float?)null : Reader.GetFloat(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetFloat(ordinal);
         }
 
         public double? GetDouble(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (double?)null : Reader.GetDouble(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetDouble(ordinal);
         }
 
         public decimal? GetDecimal(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (decimal?)null : Reader.GetDecimal(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetDecimal(ordinal);
         }
 
         public DateTime? GetDateTime(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (DateTime?)null : Reader.GetDateTime(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetDateTime(ordinal);
         }
 
         public DateTimeOffset? GetDateTimeOffset(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (DateTimeOffset?)null : Reader.GetDateTimeOffset(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetDateTimeOffset(ordinal);
         }
 
         public TimeSpan? GetTimeSpan(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (TimeSpan?)null : Reader.GetTimeSpan(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetTimeSpan(ordinal);
         }
 
-        public string GetString(int ordinal)
+        public string? GetString(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (string)null : Reader.GetString(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : Reader.GetString(ordinal);
         }
 
         public decimal? GetSqlMoney(int ordinal)
         {
-            return Reader.IsDBNull(ordinal) ? (decimal?)null : (decimal)Reader.GetSqlMoney(ordinal);
+            if (Reader == null)
+            {
+                throw new InvalidOperationException("Reader is null. Was Execute() called?");
+            }
+
+            return Reader.IsDBNull(ordinal) ? null : (decimal)Reader.GetSqlMoney(ordinal);
         }
 
         #region >>>dispose...

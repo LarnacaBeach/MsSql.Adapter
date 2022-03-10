@@ -2,7 +2,7 @@
 using ProtoBuf.Grpc.Server;
 using Serilog;
 
-namespace mssql.adapter.helpers
+namespace MsSql.Adapter.helpers
 {
     public static class StartupHelper
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace standard.types
+namespace MsSql.Adapter.Standard.Types
 {
     [DataContract]
     public class OperationResult : IOperationResult
@@ -45,7 +45,7 @@ namespace standard.types
         public int StatusCode { get; set; }
 
         [DataMember(Order = 2)]
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
 
         public override string ToString()
         {
@@ -70,6 +70,7 @@ namespace standard.types
         public OperationResult()
         {
             StatusCode = (int)EOperationCode.Ok;
+            Data = default(T);
         }
 
         public OperationResult(string statusMessage)
@@ -82,7 +83,6 @@ namespace standard.types
         public OperationResult(T data)
         {
             StatusCode = (int)EOperationCode.Ok;
-
             Data = data;
         }
 
@@ -93,14 +93,14 @@ namespace standard.types
             Data = default(T);
         }
 
-        public OperationResult(int statusCode, string statusMessage, T data)
+        public OperationResult(int statusCode, string? statusMessage, T data)
         {
             StatusCode = statusCode;
             StatusMessage = statusMessage;
             Data = data;
         }
 
-        public OperationResult(T data, int statusCode, string statusMessage = null)
+        public OperationResult(T data, int statusCode, string? statusMessage = null)
         {
             StatusCode = statusCode;
             StatusMessage = statusMessage;
@@ -125,10 +125,10 @@ namespace standard.types
         public int StatusCode { get; set; }
 
         [DataMember(Order = 2)]
-        public string StatusMessage { get; set; }
+        public string? StatusMessage { get; set; }
 
         [DataMember(Order = 3)]
-        public T Data { get; set; }
+        public T? Data { get; set; }
 
         public override string ToString()
         {

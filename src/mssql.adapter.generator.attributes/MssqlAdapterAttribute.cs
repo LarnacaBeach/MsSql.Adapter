@@ -1,4 +1,4 @@
-﻿namespace mssql.adapter.generator
+﻿namespace MsSql.Adapter.Generator
 {
     /// <summary>
     /// Add to a Class to indicate that adapter methods should be generated for it

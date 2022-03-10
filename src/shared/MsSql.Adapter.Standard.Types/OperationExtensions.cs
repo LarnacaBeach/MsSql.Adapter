@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace standard.types
+namespace MsSql.Adapter.Standard.Types
 {
     public static class OperationExtensions
     {

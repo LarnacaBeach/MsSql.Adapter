@@ -1,8 +1,8 @@
-﻿using mssql.collector.types;
+﻿using MsSql.Collector.Types;
 using System;
 using System.Collections.Generic;
 
-namespace mssql.collector
+namespace MsSql.Collector
 {
     public class ContractOrderDictionary
     {

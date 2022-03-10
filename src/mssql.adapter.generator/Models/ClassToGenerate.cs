@@ -1,4 +1,4 @@
-namespace mssql.adapter.generator.models;
+namespace MsSql.Adapter.Generator.models;
 
 public readonly struct ClassToGenerate
 {

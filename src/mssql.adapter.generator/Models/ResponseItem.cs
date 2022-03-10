@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 
 
-namespace mssql.adapter.generator.Models;
+namespace MsSql.Adapter.Generator.Models;
 
 [DataContract]
 public class ResponseItem
@@ -22,7 +22,7 @@ public class ResponseItem
     [DataMember(Order = 5)]
     public bool IsOperationResult { get; set; }
 
-    public ResponseItem(collector.types.ResponseItem responseItem)
+    public ResponseItem(Collector.Types.ResponseItem responseItem)
     {
         Name = responseItem.Name;
         Params = responseItem.Params
@@ -33,6 +33,6 @@ public class ResponseItem
             .DefaultIfEmpty()
             .Max();
         Order = responseItem.Order;
-        IsOperationResult = collector.types.Helpers.IsOperationResult(responseItem);
+        IsOperationResult = Collector.Types.Helpers.IsOperationResult(responseItem);
     }
 }

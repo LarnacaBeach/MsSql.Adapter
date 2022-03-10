@@ -1,6 +1,6 @@
 ﻿using System.Runtime.Serialization;
 
-namespace mssql.adapter
+namespace MsSql.Adapter
 {
     [DataContract]
     public class DalServiceOptions

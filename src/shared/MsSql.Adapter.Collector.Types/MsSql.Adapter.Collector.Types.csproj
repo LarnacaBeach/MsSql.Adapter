@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+	<LangVersion>Latest</LangVersion>
+	<PackageId>MsSql.Adapter.Collector.Types</PackageId>
+	<PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageTags>mssql;adapter;collector;types</PackageTags>
+    <RepositoryUrl>https://github.com/LarnacaBeach/mssql.adapter.git</RepositoryUrl>
+	<RepositoryType>git</RepositoryType>
+	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
+	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<!-- Optional: Embed source files that are not tracked by the source control manager in the PDB -->
+	<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>Types for the MsSql.Adapter.Collector</Description>
+	<Version>1.0.0</Version>
+    <Authors>LarnacaBeach Contributors</Authors>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

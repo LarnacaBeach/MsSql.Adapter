@@ -1,14 +1,14 @@
 using Microsoft.CodeAnalysis.Text;
-using mssql.adapter.generator.models;
+using MsSql.Adapter.Generator.models;
 using Scriban;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
 using System.Linq;
 using Scriban.Runtime;
-using mssql.adapter.generator.Models;
+using MsSql.Adapter.Generator.Models;
 
-namespace mssql.adapter.generator.helpers;
+namespace MsSql.Adapter.Generator.helpers;
 
 public static class SourceGenerationHelper
 {
@@ -78,7 +78,7 @@ public static class SourceGenerationHelper
     public static DatabaseMeta GetDatabaseMeta(string resultPath)
     {
         var jsonContent = File.ReadAllText(resultPath);
-        var meta = JsonSerializer.Deserialize<collector.types.DatabaseMeta>(jsonContent, new JsonSerializerOptions
+        var meta = JsonSerializer.Deserialize<Collector.Types.DatabaseMeta>(jsonContent, new JsonSerializerOptions
         {
             IncludeFields = true,
         });

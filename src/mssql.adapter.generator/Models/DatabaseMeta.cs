@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
-namespace mssql.adapter.generator.Models;
+namespace MsSql.Adapter.Generator.Models;
 
 [DataContract]
 public class DatabaseMeta
@@ -14,7 +14,7 @@ public class DatabaseMeta
     [DataMember(Order = 2)]
     public List<ProcedureMeta> Procedures { get; set; }
 
-    public DatabaseMeta(collector.types.DatabaseMeta dbMeta)
+    public DatabaseMeta(Collector.Types.DatabaseMeta dbMeta)
     {
         Name = dbMeta.Name;
         Procedures = dbMeta.Procedures

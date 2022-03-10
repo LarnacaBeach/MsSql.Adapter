@@ -5,7 +5,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace mssql.adapter.generator.helpers;
+namespace MsSql.Adapter.Generator.helpers;
 
 internal class TemplateLoader : ITemplateLoader
 {

@@ -1,4 +1,4 @@
-﻿namespace standard.types
+﻿namespace MsSql.Adapter.Standard.Types
 {
     public enum EOperationCode
     {

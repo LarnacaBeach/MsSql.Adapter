@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-namespace mssql.collector
+namespace MsSql.Collector
 {
     internal static class IEnumerableUtils
     {

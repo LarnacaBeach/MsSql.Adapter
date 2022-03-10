@@ -2,7 +2,7 @@
 using System.Runtime.Serialization;
 
 
-namespace mssql.adapter.generator.Models;
+namespace MsSql.Adapter.Generator.Models;
 
 [DataContract]
 public class ProcedureMeta
@@ -22,7 +22,7 @@ public class ProcedureMeta
     [DataMember(Order = 6)]
     public int RequestMaxOrder { get; set; }
 
-    public ProcedureMeta(collector.types.ProcedureMeta procedureMeta)
+    public ProcedureMeta(Collector.Types.ProcedureMeta procedureMeta)
     {
         SpName = procedureMeta.SpName;
         Request = procedureMeta.Request
