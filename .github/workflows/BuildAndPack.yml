@@ -18,10 +18,26 @@ jobs:
       uses: actions/setup-dotnet@v2.0.0
       with:
         dotnet-version: 6.0.x
-    - name: Publish
+    - name: Publish MsSql.Adapter.Collector.Types
       uses: alirezanet/publish-nuget@v3.0.0
       with:
         PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Collector.Types/MsSql.Adapter.Collector.Types.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        INCLUDE_SYMBOLS: true
+    - name: Cleanup
+      run: rm -f *.nupkg *.snupkg
+    - name: Publish MsSql.Adapter.Standard.Types
+      uses: alirezanet/publish-nuget@v3.0.0
+      with:
+        PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Standard.Types/MsSql.Adapter.Standard.Types.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        INCLUDE_SYMBOLS: true
+    - name: Cleanup
+      run: rm -f *.nupkg *.snupkg
+    - name: Publish MsSql.Adapter.Utils
+      uses: alirezanet/publish-nuget@v3.0.0
+      with:
+        PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Utils/MsSql.Adapter.Utils.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         INCLUDE_SYMBOLS: true
     - name: Cleanup
