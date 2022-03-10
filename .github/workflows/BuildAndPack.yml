@@ -24,6 +24,7 @@ jobs:
         PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Collector.Types/MsSql.Adapter.Collector.Types.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         INCLUDE_SYMBOLS: true
+        TAG_COMMIT: false
     - name: Cleanup
       run: rm -f *.nupkg *.snupkg
     - name: Publish MsSql.Adapter.Standard.Types
@@ -32,6 +33,7 @@ jobs:
         PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Standard.Types/MsSql.Adapter.Standard.Types.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         INCLUDE_SYMBOLS: true
+        TAG_COMMIT: false
     - name: Cleanup
       run: rm -f *.nupkg *.snupkg
     - name: Publish MsSql.Adapter.Utils
@@ -40,5 +42,6 @@ jobs:
         PROJECT_FILE_PATH: src/shared/MsSql.Adapter.Utils/MsSql.Adapter.Utils.csproj
         NUGET_KEY: ${{secrets.NUGET_API_KEY}}
         INCLUDE_SYMBOLS: true
+        TAG_COMMIT: false
     - name: Cleanup
       run: rm -f *.nupkg *.snupkg
