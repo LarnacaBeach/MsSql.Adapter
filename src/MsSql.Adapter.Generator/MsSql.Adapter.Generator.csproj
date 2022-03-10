@@ -14,7 +14,7 @@
 	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Description>A source generator for creating a service with endpoints for all stored procedures from mssql-adapter-collector result.json</Description>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
     <Authors>LarnacaBeach Contributors</Authors>
 	<PackFolder>analyzers\cs</PackFolder>
 	<DebugType>embedded</DebugType>
@@ -65,6 +65,16 @@
 	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Threading_Tasks_Extensions)\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll" IncludeRuntimeDependency="false" />
 	  <TargetPathWithTargetPlatformMoniker Include="$(PKGMicrosoft_Bcl_AsyncInterfaces)\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll" IncludeRuntimeDependency="false" />
 	  <TargetPathWithTargetPlatformMoniker Condition=" '$(Configuration)' != 'Debug' " Include="$(PKGMsSql_Adapter_Collector_Types)\lib\netstandard2.0\MsSql.Adapter.Collector.Types.dll" IncludeRuntimeDependency="false" />
+    </ItemGroup>
+  </Target>
+
+  <!-- 
+    https://github.com/dotnet/roslyn/issues/52017#issuecomment-1046216200
+    This automatically adds explicit and transient dependencies so that they are available at the time the generator is executed. 
+  -->
+  <Target Name="AddGenerationTimeReferences" AfterTargets="ResolvePackageDependenciesForBuild">
+    <ItemGroup>
+      <None Include="@(ResolvedCompileFileDefinitions)" Pack="true" PackagePath="analyzers/dotnet/cs" />
     </ItemGroup>
   </Target>
 

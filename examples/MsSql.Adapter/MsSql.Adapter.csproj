@@ -47,7 +47,7 @@
   <ItemGroup>
     <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Standard.Types" Version="1.0.0" />
     <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Utils" Version="1.0.1" />
-	  <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Generator" Version="1.0.0" PrivateAssets="all" ExcludeAssets="runtime" />
+	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Generator" Version="1.0.0" PrivateAssets="all" ExcludeAssets="runtime" />
   </ItemGroup>
 	
   <ItemGroup>
