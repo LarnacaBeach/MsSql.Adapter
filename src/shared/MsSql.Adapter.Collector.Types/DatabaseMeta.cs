@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Serialization;
 
-namespace MsSql.Collector.Types
+namespace MsSql.Adapter.Collector.Types
 {
     [Serializable]
     [DataContract]

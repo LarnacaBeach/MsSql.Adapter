@@ -5,7 +5,7 @@
 	<!-- Do not include the generator as a lib dependency -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <Nullable>enable</Nullable>
-    <PackageId>Mssql.Adapter.Generator</PackageId>
+    <PackageId>MsSql.Adapter.Generator</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>mssql;adapter;source generator;incremental</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
@@ -41,7 +41,7 @@
 	<PackageReference Include="System.Text.Json" Version="6.0.2" GeneratePathProperty="true" PrivateAssets="all" />
 	<ProjectReference Include="..\MsSql.Adapter.Generator.Attributes\MsSql.Adapter.Generator.Attributes.csproj" PrivateAssets="All" />
 	<ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
-	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.0" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.1" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 
   <!--

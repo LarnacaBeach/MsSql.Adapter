@@ -17,7 +17,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Description>Types for the MsSql.Adapter.Collector</Description>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
     <Authors>LarnacaBeach Contributors</Authors>
   </PropertyGroup>
 

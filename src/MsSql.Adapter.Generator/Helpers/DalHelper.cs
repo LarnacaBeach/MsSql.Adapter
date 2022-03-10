@@ -1,4 +1,4 @@
-﻿using MsSql.Collector.Types;
+﻿using MsSql.Adapter.Collector.Types;
 using System;
 using System.Linq;
 using System.Text.RegularExpressions;

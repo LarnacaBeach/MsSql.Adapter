@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace MsSql.Collector.Types
+namespace MsSql.Adapter.Collector.Types
 {
     public static class Helpers
     {

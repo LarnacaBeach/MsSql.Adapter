@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Options;
-using MsSql.Collector.Types;
+using MsSql.Adapter.Collector.Types;
 using MsSql.Adapter.Utils;
 using Newtonsoft.Json;
 using MsSql.Adapter.Standard.Types;
