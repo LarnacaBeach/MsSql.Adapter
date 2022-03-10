@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
 	<LangVersion>Latest</LangVersion>
+    <Nullable>enable</Nullable>
 	<PackageId>MsSql.Adapter.Collector.Types</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>mssql;adapter;collector;types</PackageTags>
@@ -18,7 +19,6 @@
     <Description>Types for the MsSql.Adapter.Collector</Description>
 	<Version>1.0.0</Version>
     <Authors>LarnacaBeach Contributors</Authors>
-    <Nullable>enable</Nullable>
   </PropertyGroup>
 
 </Project>

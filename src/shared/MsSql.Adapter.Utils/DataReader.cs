@@ -39,7 +39,7 @@ namespace MsSql.Adapter.Utils
             return DbConnection;
         }
 
-        public DataTable GetSchema(string collection, string[] restrictionValues)
+        public DataTable GetSchema(string collection, string?[] restrictionValues)
         {
             return GetDbConnection().GetSchema(collection, restrictionValues);
         }
