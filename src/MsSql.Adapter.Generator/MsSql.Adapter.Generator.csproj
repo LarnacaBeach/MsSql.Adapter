@@ -13,13 +13,12 @@
 	<RepositoryType>git</RepositoryType>
 	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
-	<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Description>A source generator for creating a service with endpoints for all stored procedures from mssql-adapter-collector result.json</Description>
 	<Version>1.0.0</Version>
     <Authors>LarnacaBeach Contributors</Authors>
 	<PackFolder>analyzers\cs</PackFolder>
+	<DebugType>embedded</DebugType>
+	<DebugSymbols>true</DebugSymbols>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
 	<NoWarn>$(NoWarn);RS2000</NoWarn>
   </PropertyGroup>
