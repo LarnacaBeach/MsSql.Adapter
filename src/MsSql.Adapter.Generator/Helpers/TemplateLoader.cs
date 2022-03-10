@@ -1,11 +1,9 @@
 ﻿using Scriban;
 using Scriban.Parsing;
 using Scriban.Runtime;
-using System;
-using System.Collections.Generic;
-using System.Text;
+using System.Threading.Tasks;
 
-namespace MsSql.Adapter.Generator.helpers;
+namespace MsSql.Adapter.Generator.Helpers;
 
 internal class TemplateLoader : ITemplateLoader
 {

@@ -3,7 +3,7 @@ using System;
 using System.Linq;
 using System.Text.RegularExpressions;
 
-namespace MsSql.Adapter.Generator.helpers
+namespace MsSql.Adapter.Generator.Helpers
 {
     public static class DalHelper
     {

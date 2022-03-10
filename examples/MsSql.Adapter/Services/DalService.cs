@@ -1,6 +1,6 @@
 ﻿namespace MsSql.Adapter;
 
-[Generator.MssqlAdapter]
+[Generator.MsSqlAdapter]
 public partial class DalService
 {
 }

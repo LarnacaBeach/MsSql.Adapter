@@ -1,14 +1,13 @@
-using Microsoft.CodeAnalysis.Text;
-using MsSql.Adapter.Generator.models;
+using MsSql.Adapter.Generator.Models;
 using Scriban;
+using Scriban.Runtime;
 using System.Reflection;
 using System.Text;
 using System.Text.Json;
-using System.Linq;
-using Scriban.Runtime;
-using MsSql.Adapter.Generator.Models;
+using System.IO;
+using System;
 
-namespace MsSql.Adapter.Generator.helpers;
+namespace MsSql.Adapter.Generator.Helpers;
 
 public static class SourceGenerationHelper
 {

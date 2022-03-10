@@ -1,17 +1,22 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
-using MsSql.Adapter.Generator.helpers;
-using MsSql.Adapter.Generator.models;
+using MsSql.Adapter.Generator.Helpers;
+using MsSql.Adapter.Generator.Models;
+using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
+using System.IO;
+using System.Linq;
+using System.Threading;
 
 namespace MsSql.Adapter.Generator;
 
 [Generator]
 public class AdapterGenerator : IIncrementalGenerator
 {
-    private static readonly string MssqlAdapterAttributeName = nameof(MssqlAdapterAttribute);
-    private static readonly string MssqlAdapterAttributeNamespace = typeof(MssqlAdapterAttribute).Namespace;
+    private static readonly string MssqlAdapterAttributeName = nameof(MsSqlAdapterAttribute);
+    private static readonly string MssqlAdapterAttributeNamespace = typeof(MsSqlAdapterAttribute).Namespace;
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -108,7 +113,7 @@ public class AdapterGenerator : IIncrementalGenerator
     static List<ClassToGenerate> GetTypesToGenerate(Compilation compilation, IEnumerable<ClassDeclarationSyntax> classes, SourceProductionContext context)
     {
         var classesToGenerate = new List<ClassToGenerate>();
-        INamedTypeSymbol? classAttribute = compilation.GetTypeByMetadataName(typeof(MssqlAdapterAttribute).FullName);
+        INamedTypeSymbol? classAttribute = compilation.GetTypeByMetadataName(typeof(MsSqlAdapterAttribute).FullName);
 
         if (classAttribute == null)
         {
@@ -165,19 +170,19 @@ public class AdapterGenerator : IIncrementalGenerator
 
                     switch (namedArgument.Key)
                     {
-                        case nameof(MssqlAdapterAttribute.CollectorResultPath):
+                        case nameof(MsSqlAdapterAttribute.CollectorResultPath):
                             collectorResultPath = value.ToString();
                             break;
-                        case nameof(MssqlAdapterAttribute.OptionsKey):
+                        case nameof(MsSqlAdapterAttribute.OptionsKey):
                             optionsKey = value.ToString();
                             break;
-                        case nameof(MssqlAdapterAttribute.OptionsConnectionStringKey):
+                        case nameof(MsSqlAdapterAttribute.OptionsConnectionStringKey):
                             optionsConnectionStringKey = value.ToString();
                             break;
-                        case nameof(MssqlAdapterAttribute.OptionsConnectionUserKey):
+                        case nameof(MsSqlAdapterAttribute.OptionsConnectionUserKey):
                             optionsConnectionUserKey = value.ToString();
                             break;
-                        case nameof(MssqlAdapterAttribute.OptionsConnectionPasswordKey):
+                        case nameof(MsSqlAdapterAttribute.OptionsConnectionPasswordKey):
                             optionsConnectionPasswordKey = value.ToString();
                             break;
                         default:

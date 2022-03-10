@@ -1,10 +1,12 @@
-﻿namespace MsSql.Adapter.Generator
+﻿using System;
+
+namespace MsSql.Adapter.Generator
 {
     /// <summary>
     /// Add to a Class to indicate that adapter methods should be generated for it
     /// </summary>
     [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class MssqlAdapterAttribute : System.Attribute
+    public class MsSqlAdapterAttribute : System.Attribute
     {
         /// <summary>
         /// The path to the result.json file created by dotnet-mssql-collector

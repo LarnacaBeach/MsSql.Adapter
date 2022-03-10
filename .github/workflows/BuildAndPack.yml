@@ -54,3 +54,9 @@ jobs:
         TAG_COMMIT: false
     - name: Cleanup
       run: rm -f *.nupkg *.snupkg
+    - name: Publish MsSql.Adapter.Generator
+      uses: alirezanet/publish-nuget@v3.0.0
+      with:
+        PROJECT_FILE_PATH: src/MsSql.Adapter.Generator/MsSql.Adapter.Generator.csproj
+        NUGET_KEY: ${{secrets.NUGET_API_KEY}}
+        INCLUDE_SYMBOLS: true

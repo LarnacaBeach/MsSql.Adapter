@@ -5,20 +5,21 @@
 	<!-- Do not include the generator as a lib dependency -->
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <Nullable>enable</Nullable>
-    <ImplicitUsings>true</ImplicitUsings>
     <PackageId>Mssql.Adapter.Generator</PackageId>
-    <Description>A source generator for creating mssql adapter from dotnet-mssql-collector result.json</Description>
-    <PackageReadmeFile>README.md</PackageReadmeFile>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
-	<PackageTags>dotnet, Generator</PackageTags>
-    <Authors>LarnacaBeach Contributors</Authors>
+    <PackageTags>mssql;adapter;source generator;incremental</PackageTags>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/LarnacaBeach/mssql.adapter.git</RepositoryUrl>
 	<RepositoryType>git</RepositoryType>
 	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
+	<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <Description>A source generator for creating a service with endpoints for all stored procedures from mssql-adapter-collector result.json</Description>
+	<Version>1.0.0</Version>
+    <Authors>LarnacaBeach Contributors</Authors>
 	<PackFolder>analyzers\cs</PackFolder>
-	<DebugType>embedded</DebugType>
-	<DebugSymbols>true</DebugSymbols>
     <PackageScribanIncludeSource>true</PackageScribanIncludeSource>
 	<NoWarn>$(NoWarn);RS2000</NoWarn>
   </PropertyGroup>
@@ -39,8 +40,9 @@
 	<PackageReference Include="System.Text.Encodings.Web" Version="6.0.0" GeneratePathProperty="true" PrivateAssets="all" />
 	<PackageReference Include="System.Threading.Tasks.Extensions" Version="4.5.4" GeneratePathProperty="true" PrivateAssets="all" />
 	<PackageReference Include="System.Text.Json" Version="6.0.2" GeneratePathProperty="true" PrivateAssets="all" />
-	<ProjectReference Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
 	<ProjectReference Include="..\MsSql.Adapter.Generator.Attributes\MsSql.Adapter.Generator.Attributes.csproj" PrivateAssets="All" />
+	<ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
+	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.0" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 
   <!--
@@ -63,6 +65,7 @@
 	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Runtime_CompilerServices_Unsafe)\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll" IncludeRuntimeDependency="false" />
 	  <TargetPathWithTargetPlatformMoniker Include="$(PKGSystem_Threading_Tasks_Extensions)\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll" IncludeRuntimeDependency="false" />
 	  <TargetPathWithTargetPlatformMoniker Include="$(PKGMicrosoft_Bcl_AsyncInterfaces)\lib\netstandard2.0\Microsoft.Bcl.AsyncInterfaces.dll" IncludeRuntimeDependency="false" />
+	  <TargetPathWithTargetPlatformMoniker Condition=" '$(Configuration)' != 'Debug' " Include="$(PKGMsSql_Adapter_Collector_Types)\lib\netstandard2.0\MsSql.Adapter.Collector.Types.dll" IncludeRuntimeDependency="false" />
     </ItemGroup>
   </Target>
 
@@ -78,6 +81,6 @@
 	<None Include="$(OutputPath)\MsSql.Adapter.Generator.Attributes.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	  <!-- Package the generator attributes in the lib directory of the nuget package and expose it to the project that references the generator -->
 	<None Include="$(OutputPath)\MsSql.Adapter.Generator.Attributes.dll" Pack="true" PackagePath="lib\netstandard2.0" Visible="true" />
-	<None Include="$(OutputPath)\MsSql.Adapter.Collector.Types.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+	<None Condition=" '$(Configuration)' == 'Debug' " Include="$(OutputPath)\MsSql.Adapter.Collector.Types.dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
   </ItemGroup>
 </Project>
