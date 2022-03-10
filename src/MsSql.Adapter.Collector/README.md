@@ -1,56 +1,31 @@
-# mssql.adapter.generator
+# MsSql.Adapter.Collector
 
-A Source Generator package that generates methods for a class, including associated requests & response classes, based on the `results.json` file created by `dotnet-mssql-collector` tool.
+This tool will collect information about all the stored procedures in a database and store the results in a `result.json` file.
 
-> This source generator requires the .NET 6 SDK. You can target earlier frameworks like .NET Core 3.1 etc, but the _SDK_ must be at least 6.0.100
-
-Add the package to your application using
-
+## Use the tool as a global tool
 ```bash
-dotnet add package mssql.adapter.generator
+dotnet tool install -g MsSql.Adapter.Collector
+
+mssql-adapter-collector --connection "MultipleActiveResultSets=true; Application Name=SQLCollect
+or; Data Source=localhost; Initial Catalog=my_database; User ID=test; Password=test"
 ```
 
-This adds a `<PackageReference>` to your project. You can additionally mark the package as `PrivateAsets="all"` and `ExcludeAssets="runtime"`.
+## Use the tool as a local tool
+```bash
+dotnet new tool-manifest
+dotnet tool install MsSql.Adapter.Collector
 
-> Setting `PrivateAssets="all"` means any projects referencing this one won't get a reference to the _mssql.adapter.generator_ package. Setting `ExcludeAssets="runtime"` ensures the _mssql.adapter.generator.attributes.dll_ file is not copied to your build output (it is not required at runtime).
-
-```xml
-<Project Sdk="Microsoft.NET.Sdk.Web">
-
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-    <LangVersion>Latest</LangVersion>
-  </PropertyGroup>
-
-  <!-- Add the package -->~~~~
-  <PackageReference Include="mssql.adapter.generator" Version="1.0.0"
-    PrivateAssets="all" ExcludeAssets="runtime" />
-  <!-- -->
-
-</Project>
+dotnet mssql-adapter-collector --connection "MultipleActiveResultSets=true; Application Name=SQLCollect
+or; Data Source=localhost; Initial Catalog=my_database; User ID=test; Password=test"
 ```
 
-Adding the package will automatically add a marker attribute, `[MssqlAdapterAttribute]`, to your project.
-
-To use the generator, add the `[MssqlAdapterAttribute]` attribute to a partial class. For example:
-
-```csharp
-[MssqlAdapter]
-public partial class DalService
-{
-}
-```
-
-This will generate an interface that can be used by the `protobuf-net.Grpc`. For example:
-
-```csharp
-[ServiceContract(Name = "mssql.adapter.ExampleDatabase.ExampleDatabaseService")]
-public interface IDalService
-{
-
-    Task<FirstStoredProcedureResponse> FirstStoredProcedure(FirstStoredProcedureRequest req);
-}
-```
-Additional files that can be used in javascript to add support for nullable values are generated in `obj/GeneratedFiles/javascript/` folder.
-
-For a boilerplate project which creates a gRPC service check [mssql.adapter](https://github.com/LarnacaBeach/mssql.adapter/tree/main/examples/mssql.adapter)
+## Available options
+Command Line Argument | Environment Variable | Default Value | Description
+--- | --- | --- | ---
+--connection | SqlCollectorServiceOptions__ConnectionString | | The database connection string.
+--user | SqlCollectorServiceOptions__ConnectionUser | | The database connection user.
+--password | SqlCollectorServiceOptions__ConnectionPassword | | The database connection password.
+--pattern | SqlCollectorServiceOptions__ProcedurePattern | (?i)(^prc__?)(?!.*internal).* | The pattern to use for identifying valid stored procedures.
+--previous | SqlCollectorServiceOptions__PreviousResultFile | result_prev.json | The previous generated results, used to keep same order for members.
+--output | SqlCollectorServiceOptions__ResultFile | result.json | The output file path relative to current working directory.
+--skip-response | SqlCollectorServiceOptions__SkipOutputParams | false | Skip parsing response of stored procedures.

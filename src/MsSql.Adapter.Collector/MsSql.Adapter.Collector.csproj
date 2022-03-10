@@ -2,7 +2,9 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFrameworks>netcoreapp3.1;net6.0</TargetFrameworks>
+	<LangVersion>Latest</LangVersion>
+    <Nullable>enable</Nullable>
     <PackageId>MsSql.Adapter.Collector</PackageId>
 	<PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageTags>mssql;adapter;collector</PackageTags>
@@ -16,7 +18,7 @@
 	<!-- Optional: Build symbol package (.snupkg) to distribute the PDB containing Source Link -->
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <Description>get sql stored procedure bindings</Description>
+    <Description>Collects information about all the stored procedures in a database</Description>
 	<Version>1.0.0</Version>
     <Authors>LarnacaBeach Contributors</Authors>
     <PackAsTool>true</PackAsTool>
@@ -25,6 +27,9 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <DotNetCliToolReference Include="dotnet-svcutil" Version="1.0.*" />
+	<DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" />
+	<PackageReference Include="Microsoft.Extensions.Configuration.CommandLine" Version="6.0.0" /> 
     <PackageReference Include="Microsoft.Extensions.Configuration.UserSecrets" Version="3.1.13" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.5" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.1.5" />
@@ -32,13 +37,8 @@
     <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="System.CommandLine" Version="2.0.0-beta1.20104.2" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.7.0" />
-    <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
-    <DotNetCliToolReference Include="dotnet-svcutil" Version="1.0.*" />
-	<DotNetCliToolReference Include="Microsoft.Extensions.SecretManager.Tools" Version="2.0.0" /> 
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="System.Data.HashFunction.MurmurHash" Version="2.0.0" />
+    <PackageReference Include="System.IO.Packaging" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Duplex" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.Http" Version="4.7.0" />
     <PackageReference Include="System.ServiceModel.NetTcp" Version="4.7.0" />
@@ -47,9 +47,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" />
-    <ProjectReference Include="..\shared\MsSql.Adapter.Utils\MsSql.Adapter.Utils.csproj" />
-    <ProjectReference Include="..\shared\MsSql.Adapter.Standard.Types\MsSql.Adapter.Standard.Types.csproj" />
+    <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.0" />
+    <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Standard.Types" Version="1.0.0" />
+    <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Utils" Version="1.0.1" />
+  </ItemGroup>
+	
+  <ItemGroup>
+    <ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" />
+    <ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Standard.Types\MsSql.Adapter.Standard.Types.csproj" />
+    <ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Utils\MsSql.Adapter.Utils.csproj" />
   </ItemGroup>
 	
   <ItemGroup>

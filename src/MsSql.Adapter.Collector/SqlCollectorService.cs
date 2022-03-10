@@ -7,7 +7,6 @@ using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Security;
@@ -19,7 +18,7 @@ namespace MsSql.Collector
     public class SqlCollectorService
     {
         private SqlCollectorServiceOptions options;
-        private SqlCredential _credential = null;
+        private SqlCredential? _credential = null;
 
         public SqlCollectorService(IOptions<SqlCollectorServiceOptions> secrets)
         {
@@ -28,7 +27,7 @@ namespace MsSql.Collector
             if (!string.IsNullOrEmpty(options.ConnectionUser))
             {
                 var sc = new SecureString();
-                foreach (char c in options.ConnectionPassword ?? "") sc.AppendChar(c);
+                foreach (char c in options.ConnectionPassword) sc.AppendChar(c);
                 sc.MakeReadOnly();
 
                 _credential = new SqlCredential(options.ConnectionUser, sc);
@@ -53,7 +52,7 @@ namespace MsSql.Collector
 
                 var jsonFile = Path.Join(workingDirectory, options.ResultFile);
                 File.WriteAllText(jsonFile, JsonConvert.SerializeObject(resp.Data, Formatting.Indented));
-                return new OperationResult { StatusMessage = $"write succesfully database meta to: {jsonFile}" };
+                return new OperationResult { StatusMessage = $"Database meta was saved to: {jsonFile}" };
             }
             catch (Exception ex)
             {
@@ -66,7 +65,7 @@ namespace MsSql.Collector
             var procsResult = await GetProcedures(idx).ConfigureAwait(false);
             if (procsResult.Fail() || procsResult.Data.EmptyIfNull().Any(r => r.Fail()))
             {
-                return new OperationResult<DatabaseMeta>($"Errors on collect procedures data: [{ string.Join(",", (procsResult as IOperationResult).Yield().Union(procsResult.Data.EmptyIfNull()).Where(i => i.Fail()).Select(i => i.StatusMessage).ToArray()) }]");
+                return new OperationResult<DatabaseMeta>($"Errors on collecting procedures data: [{ string.Join(",", (procsResult as IOperationResult).Yield().Union(procsResult.Data.EmptyIfNull()).Where(i => i.Fail()).Select(i => i.StatusMessage).ToArray()) }]");
             }
             else
             {
@@ -74,7 +73,10 @@ namespace MsSql.Collector
                 return new OperationResult<DatabaseMeta>(new DatabaseMeta()
                 {
                     Name = DalUtils.StripUnderscorePrefix(conBuilder.InitialCatalog),
-                    Procedures = procsResult.Data.Select(i => i.Data).ToArray()
+                    Procedures = procsResult.Data.EmptyIfNull()
+                        .Where(i => i.Data != null)
+                        .Select(i => i.Data!)
+                        .ToArray()
                 });
             }
         }
@@ -88,11 +90,13 @@ namespace MsSql.Collector
                 var procList = new List<string>();
                 using (var dr = new DataReader(options.ConnectionString, _credential))
                 {
-                    var dt = dr.GetSchema("Procedures", new string[] { null, null, null, "PROCEDURE" });
+                    var dt = dr.GetSchema("Procedures", new string?[] { null, null, null, "PROCEDURE" });
 
-                    foreach (DataRow row in dt.Rows)
+                    foreach (DataRow? row in dt.Rows)
                     {
-                        procList.Add(row["SPECIFIC_NAME"].ToString());
+                        if (row == null) continue;
+
+                        procList.Add(row["SPECIFIC_NAME"].ToString()!);
                     }
                 }
                 var list = new List<OperationResult<ProcedureMeta>>();
@@ -127,12 +131,13 @@ namespace MsSql.Collector
                 if (options.SkipOutputParams) return new OperationResult<ProcedureMeta>(spmeta);
                 if (!opReq.Data.hasSchemaParam)
                 {
-                    spmeta.Errors.Add($"{spName} do not have _schema in the input parameters, skip harvesting output params");
+                    spmeta.Errors.Add($"{spName} does not have _schema in the input parameters, output params will not be parsed");
+
                     return new OperationResult<ProcedureMeta>
                     {
                         Data = spmeta,
                         StatusCode = (int)EOperationCode.Error,
-                        StatusMessage = $"{spName} do not have _schema in the input parameters, skip harvesting output params"
+                        StatusMessage = $"{spName} does not have _schema in the input parameters, output params will not be parsed"
                     };
                 }
 
@@ -142,7 +147,7 @@ namespace MsSql.Collector
                 {
                     return new OperationResult<ProcedureMeta>(opResp.StatusCode, opResp.StatusMessage, spmeta);
                 }
-                spmeta.Responses = opResp.Data;
+                spmeta.Responses = opResp.Data ?? new List<ResponseItem>();
 
                 return new OperationResult<ProcedureMeta>(spmeta);
             }
@@ -174,9 +179,11 @@ WHERE procs.name = @procName", connection);
                 }
                 var list = new List<ParamMeta>();
 
-                foreach (DataRow row in schema.Rows)
+                foreach (DataRow? row in schema.Rows)
                 {
-                    var paramName = row["PARAMETER_NAME"].ToString().Replace("@", "");
+                    if (row == null) continue;
+
+                    var paramName = row["PARAMETER_NAME"].ToString()!.Replace("@", "");
                     if (paramName.StartsWith("_schema", StringComparison.InvariantCultureIgnoreCase))
                     {
                         hasSchemaParam = true;
@@ -185,7 +192,7 @@ WHERE procs.name = @procName", connection);
                     list.Add(new ParamMeta
                     {
                         Name = paramName,
-                        SqlType = row["SQL_TYPE"].ToString(),
+                        SqlType = row["SQL_TYPE"].ToString()!,
                         HasDefaultValue = (bool)row["HAS_DEFAULT"],
                         Order = idx.GetOrAddRequestIndex(spName, paramName)
                     });
@@ -208,7 +215,7 @@ WHERE procs.name = @procName", connection);
             }
         }
 
-        public static List<TvpParamMeta> GetTvp(string spName, string tvpName, string connectionString, SqlCredential credential, ContractOrderDictionary idx)
+        public static List<TvpParamMeta> GetTvp(string spName, string tvpName, string connectionString, SqlCredential? credential, ContractOrderDictionary idx)
         {
             int tvpId = 0;
             var list = new List<TvpParamMeta>();
@@ -231,9 +238,9 @@ WHERE procs.name = @procName", connection);
 
                     dr.Execute(command);
 
-                    if (!dr.Reader.HasRows)
+                    if (!dr.Reader!.HasRows)
                     {
-                        throw new Exception($@"could not found tvp {tvpName}");
+                        throw new Exception($@"Could not find TVP {tvpName}");
                     }
 
                     dr.Reader.Read();
@@ -259,9 +266,9 @@ WHERE procs.name = @procName", connection);
 
                     dr.Execute(command);
 
-                    if (!dr.Reader.HasRows)
+                    if (!dr.Reader!.HasRows)
                     {
-                        throw new Exception($@"could not found tvp props {tvpName} type_table_object_id:{tvpId}");
+                        throw new Exception($@"Could not find TVP props {tvpName} type_table_object_id:{tvpId}");
                     }
 
                     while (dr.Reader.Read())
@@ -287,13 +294,14 @@ WHERE procs.name = @procName", connection);
             var rows = dr.GetSchemaTable()?.Rows;
             if (rows != null)
             {
-                foreach (DataRow row in rows)
+                foreach (DataRow? row in rows)
                 {
-                    var paramName = row["ColumnName"].ToString();
+                    if (row == null) continue;
+
                     list.Add(new ParamMeta
                     {
-                        Name = paramName,
-                        SqlType = row["DataTypeName"].ToString(),
+                        Name = row["ColumnName"].ToString()!,
+                        SqlType = row["DataTypeName"].ToString()!,
                     });
                 }
             }
@@ -365,7 +373,7 @@ WHERE procs.name = @procName", connection);
                     do
                     {
                         var resultName = $"ResultSet{resultSetCount}";
-                        var currentRespones = GetProcedureResultSetParams(dr.Reader, spName);
+                        var currentRespones = GetProcedureResultSetParams(dr.Reader!, spName);
                         // Order =
                         if (currentRespones.Any())
                         {
@@ -398,7 +406,7 @@ WHERE procs.name = @procName", connection);
             }
             catch (Exception ex)
             {
-                return new OperationResult<List<ResponseItem>>($"{spName} get output params {ex.Message}");
+                return new OperationResult<List<ResponseItem>>($"{spName} failed parsing output params {ex.Message}");
             }
         }
 
@@ -450,7 +458,6 @@ WHERE procs.name = @procName", connection);
                     return SqlDbType.Char;
 
                 case "nchar":
-
                     return SqlDbType.NChar;
 
                 case "ntext":
@@ -470,7 +477,7 @@ WHERE procs.name = @procName", connection);
 
                 case "smallmoney":
                     return SqlDbType.SmallMoney;
-                    ;
+
                 case "sql_variant":
                     return SqlDbType.Variant;
 

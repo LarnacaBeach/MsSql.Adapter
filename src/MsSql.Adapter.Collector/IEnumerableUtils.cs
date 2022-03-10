@@ -10,7 +10,7 @@ namespace MsSql.Collector
             yield return item;
         }
 
-        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T> source)
+        public static IEnumerable<T> EmptyIfNull<T>(this IEnumerable<T>? source)
         {
             return source ?? Enumerable.Empty<T>();
         }

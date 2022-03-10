@@ -2,11 +2,11 @@
 {
     public class SqlCollectorServiceOptions
     {
-        public string ConnectionString { get; set; }
-        public string ConnectionUser { get; set; }
-        public string ConnectionPassword { get; set; }
+        public string ConnectionString { get; set; } = string.Empty;
+        public string ConnectionUser { get; set; } = string.Empty;
+        public string ConnectionPassword { get; set; } = string.Empty;
         public string ProcedurePattern { get; set; } = "(?i)(^prc__?)(?!.*internal).*";
-        public bool SkipOutputParams { get; set; }
+        public bool SkipOutputParams { get; set; } = false;
         public string ResultFile { get; set; } = "result.json";
         public string PreviousResultFile { get; set; } = "result_prev.json";
     }

@@ -7,7 +7,7 @@ namespace MsSql.Collector
     public class ContractOrderDictionary
     {
         private Dictionary<string, int> Indexs = new Dictionary<string, int>();
-        public ContractOrderDictionary(DatabaseMeta meta)
+        public ContractOrderDictionary(DatabaseMeta? meta)
         {
             if (meta == null) return;
             foreach (var proc in meta.Procedures)
