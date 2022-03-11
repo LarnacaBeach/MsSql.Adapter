@@ -12,7 +12,7 @@ namespace MsSql.Adapter.Generator
            = new("AA0001",
                  "Class must be partial",
                  "The enumeration '{0}' must be partial",
-                 nameof(AdapterAnalyzer),
+                 "Design",
                  DiagnosticSeverity.Error,
                  true);
         public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics { get; }

@@ -17,6 +17,27 @@ public class AdapterGenerator : IIncrementalGenerator
 {
     private static readonly string MssqlAdapterAttributeName = nameof(MsSqlAdapterAttribute);
     private static readonly string MssqlAdapterAttributeNamespace = typeof(MsSqlAdapterAttribute).Namespace;
+    public static readonly DiagnosticDescriptor GeneratorException = new(
+        "AG0001",
+        "Generator Exception",
+        "{Message} {InnerExceptionMessage} {StackTrace}",
+        "Usage",
+        DiagnosticSeverity.Error,
+        true);
+    public static readonly DiagnosticDescriptor InvalidSymbol = new(
+        "AG0002",
+        "Invalid Symbol",
+        "{Identifier} symbol could not be determined",
+        "Usage",
+        DiagnosticSeverity.Warning,
+        true);
+    public static readonly DiagnosticDescriptor InvalidOutputPath = new(
+        "AG0003",
+        "Invalid Output Path",
+        "{Filepath} could not be generated, because output path could not be found",
+        "Usage",
+        DiagnosticSeverity.Warning,
+        true);
 
     public void Initialize(IncrementalGeneratorInitializationContext context)
     {
@@ -95,17 +116,7 @@ public class AdapterGenerator : IIncrementalGenerator
         catch (Exception ex)
         {
             // Report a diagnostic if an exception occurs while generating code; allows consumers to know what is going on
-            string message = $"Exception: {ex.Message} {ex.InnerException?.Message} {ex.StackTrace}";
-
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(
-                    "AG0001",
-                    message,
-                    message,
-                    nameof(AdapterGenerator),
-                    DiagnosticSeverity.Error,
-                    isEnabledByDefault: true),
-                Location.None));
+            context.ReportDiagnostic(Diagnostic.Create(GeneratorException, Location.None, ex.Message, ex.InnerException?.Message, ex.StackTrace));
             //System.Diagnostics.Debugger.Launch();
         }
     }
@@ -130,17 +141,7 @@ public class AdapterGenerator : IIncrementalGenerator
             if (semanticModel.GetDeclaredSymbol(classDeclarationSyntax) is not INamedTypeSymbol classSymbol)
             {
                 // report diagnostic, something went wrong
-                string message = $"Warning: {classDeclarationSyntax.Identifier} symbol could not be determined";
-
-                context.ReportDiagnostic(Diagnostic.Create(
-                    new DiagnosticDescriptor(
-                        "AG0002",
-                        message,
-                        message,
-                        nameof(AdapterGenerator),
-                        DiagnosticSeverity.Warning,
-                        isEnabledByDefault: true),
-                    Location.None));
+                context.ReportDiagnostic(Diagnostic.Create(InvalidSymbol, Location.None, classDeclarationSyntax.Identifier));
                 continue;
             }
 
@@ -211,17 +212,9 @@ public class AdapterGenerator : IIncrementalGenerator
 
         if (absolutePath == null)
         {
-            string message = $"Warning: {filepath} could not be generated, because output path could not be found";
-
-            context.ReportDiagnostic(Diagnostic.Create(
-                new DiagnosticDescriptor(
-                    "AG0003",
-                    message,
-                    message,
-                    nameof(AdapterGenerator),
-                    DiagnosticSeverity.Warning,
-                    isEnabledByDefault: true),
-                Location.None));
+            // report diagnostic, something went wrong
+            context.ReportDiagnostic(Diagnostic.Create(InvalidOutputPath, Location.None, filepath));
+            return;
         }
 
         Directory.CreateDirectory(Path.GetDirectoryName(absolutePath));
