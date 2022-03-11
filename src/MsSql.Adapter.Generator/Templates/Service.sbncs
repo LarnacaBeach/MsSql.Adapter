@@ -217,9 +217,11 @@ for proc in DbMeta.Procedures
         }
         catch(Exception ex)
         {
-            LogException(ex, "{{ proc.SpName }}");
+            var message = GetStatusMessage(ex, "{{ proc.SpName }}");
 
-            throw new RpcException(new Status(GetStatusCode(ex, "{{ proc.SpName }}"), GetStatusMessage(ex, "{{ proc.SpName }}")));  
+            _logger.LogError(ex, $"{message}", message);
+
+            throw new RpcException(new Status(GetStatusCode(ex, "{{ proc.SpName }}"), ));  
         }
     }
 {{~ end ~}}

@@ -33,11 +33,6 @@ public partial class {{ Name }}ServiceBase
         this._logger = serviceProvider.GetRequiredService<ILogger<{{ Name }}Service>>();
     }
 
-    protected virtual void LogException(Exception ex, string spName)
-    {
-        _logger.LogError(ex, @"{spName} failed: {message}", spName, ex.Message);
-    }
-
     protected virtual StatusCode GetStatusCode(Exception ex, string spName)
     {
         if (ex is SqlException sqlEx)
