@@ -8,14 +8,14 @@ namespace {{ Namespace }};
 
 public partial class {{ Name }}ServiceBase
 {
-    protected readonly string _connectionString;
-    protected readonly SqlCredential? _credential;
-    protected readonly ILogger<{{ Name }}Service> _logger;
+    protected readonly string ConnectionString;
+    protected readonly SqlCredential? Credential;
+    protected readonly ILogger<{{ Name }}Service> Logger;
 
     public {{ Name }}ServiceBase(IServiceProvider serviceProvider)
     {
         var options = serviceProvider.GetRequiredService<IOptions<{{ OptionsKey }}>>().Value;
-        _connectionString = options.{{ OptionsConnectionStringKey }};
+        ConnectionString = options.{{ OptionsConnectionStringKey }};
 
         if (!string.IsNullOrEmpty(options.{{ OptionsConnectionUserKey }}))
         {
@@ -23,14 +23,14 @@ public partial class {{ Name }}ServiceBase
             foreach (char c in options.{{ OptionsConnectionPasswordKey }} ?? "") sc.AppendChar(c);
             sc.MakeReadOnly();
 
-            _credential = new SqlCredential(options.{{ OptionsConnectionUserKey }}, sc);
+            Credential = new SqlCredential(options.{{ OptionsConnectionUserKey }}, sc);
         }
         else
         {
-            _credential = null;
+            Credential = null;
         }
         
-        this._logger = serviceProvider.GetRequiredService<ILogger<{{ Name }}Service>>();
+        Logger = serviceProvider.GetRequiredService<ILogger<{{ Name }}Service>>();
     }
 
     protected virtual StatusCode GetStatusCode(Exception ex, string spName)

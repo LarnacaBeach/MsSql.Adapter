@@ -31,7 +31,7 @@ for proc in DbMeta.Procedures
     {
         try
         {  
-            using (var dr = new DataReader(_connectionString, _credential))
+            using (var dr = new DataReader(ConnectionString, Credential))
             {
                 #region generate sql command..
                 using (var cmd = new SqlCommand { CommandText = "{{ proc.SpName }}" })
@@ -219,9 +219,9 @@ for proc in DbMeta.Procedures
         {
             var message = GetStatusMessage(ex, "{{ proc.SpName }}");
 
-            _logger.LogError(ex, $"{message}", message);
+            Logger.LogError(ex, $"{message}", message);
 
-            throw new RpcException(new Status(GetStatusCode(ex, "{{ proc.SpName }}"), ));  
+            throw new RpcException(new Status(GetStatusCode(ex, "{{ proc.SpName }}"), message));  
         }
     }
 {{~ end ~}}
