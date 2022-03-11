@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
 
-[ServiceContract(Name = "{{ Namespace }}.{{ ToPascalCase DbMeta.Name }}.{{ ToPascalCase DbMeta.Name }}Service")]
+[ServiceContract(Name = "{{ Namespace }}.{{ ToPascalCase DbMeta.Name }}.{{ Name }}Service")]
 public interface I{{ Name }}Service
 {
 {{~

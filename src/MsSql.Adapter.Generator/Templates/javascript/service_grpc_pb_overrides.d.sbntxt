@@ -5,7 +5,7 @@ import * as grpc from "@grpc/grpc-js";
 import * as service_grpc from "./{{ string.downcase Name }}service_grpc_pb";
 import * as service_pb_overrides from "./{{ string.downcase Name }}service_pb_overrides";
 
-export class {{ ToPascalCase DbMeta.Name }}ServiceClient extends service_grpc.{{ ToPascalCase DbMeta.Name }}ServiceClient {
+export class {{ Name }}ServiceClient extends service_grpc.{{ Name }}ServiceClient {
 {{~
 for proc in DbMeta.Procedures
     baseClassName = GetBaseClassName proc.SpName
