@@ -1,4 +1,5 @@
-﻿using Microsoft.Net.Http.Headers;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using Serilog;
 using System.Web;
 

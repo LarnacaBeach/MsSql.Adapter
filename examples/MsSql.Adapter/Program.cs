@@ -1,7 +1,13 @@
-﻿using Microsoft.AspNetCore.Server.Kestrel.Core;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Server.Kestrel.Core;
+using Microsoft.Extensions.Configuration;
 using MsSql.Adapter;
 using MsSql.Adapter.helpers;
 using Serilog;
+using System;
+using System.IO;
+using System.Linq;
 
 var builder = WebApplication.CreateBuilder(args);
 
