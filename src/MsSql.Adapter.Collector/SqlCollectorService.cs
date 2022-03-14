@@ -330,7 +330,7 @@ WHERE procs.name = @procName", connection);
             return cmd;
         }
 
-        public static SqlParameter GetDefaultSqlParam(string sqlName, string sqlType, List<TvpParamMeta> tvp)
+        public static SqlParameter GetDefaultSqlParam(string sqlName, string sqlType, List<TvpParamMeta>? tvp)
         {
             var type = GetSlqDbType(sqlType);
 
@@ -345,7 +345,7 @@ WHERE procs.name = @procName", connection);
             return prm;
         }
 
-        public static object GetDefaultSqlParameterValue(List<TvpParamMeta> tvp)
+        public static object GetDefaultSqlParameterValue(List<TvpParamMeta>? tvp)
         {
             if (!(tvp?.Any() ?? false)) return DBNull.Value;
 

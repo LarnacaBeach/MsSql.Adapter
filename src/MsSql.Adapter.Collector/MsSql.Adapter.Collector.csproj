@@ -19,7 +19,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Description>Collects information about all the stored procedures in a database</Description>
-	<Version>1.0.0</Version>
+	<Version>1.0.1</Version>
     <Authors>LarnacaBeach Contributors</Authors>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mssql-adapter-collector</ToolCommandName>
@@ -47,7 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.1" />
+    <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.2" />
     <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Standard.Types" Version="1.0.0" />
     <PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Utils" Version="1.0.1" />
   </ItemGroup>

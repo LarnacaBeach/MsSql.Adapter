@@ -14,7 +14,7 @@
 	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Description>A source generator for creating a service with endpoints for all stored procedures from mssql-adapter-collector result.json</Description>
-	<Version>1.0.4</Version>
+	<Version>1.0.5</Version>
     <Authors>LarnacaBeach Contributors</Authors>
 	<PackFolder>analyzers\cs</PackFolder>
 	<DebugType>embedded</DebugType>
@@ -41,7 +41,7 @@
 	<PackageReference Include="System.Text.Json" Version="6.0.2" GeneratePathProperty="true" PrivateAssets="all" />
 	<ProjectReference Include="..\MsSql.Adapter.Generator.Attributes\MsSql.Adapter.Generator.Attributes.csproj" PrivateAssets="All" />
 	<ProjectReference Condition=" '$(Configuration)' == 'Debug' " Include="..\shared\MsSql.Adapter.Collector.Types\MsSql.Adapter.Collector.Types.csproj" OutputItemType="Analyzer" PrivateAssets="All" />
-	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.1" GeneratePathProperty="true" PrivateAssets="all" />
+	<PackageReference Condition=" '$(Configuration)' != 'Debug' " Include="MsSql.Adapter.Collector.Types" Version="1.0.2" GeneratePathProperty="true" PrivateAssets="all" />
   </ItemGroup>
 
   <!--
