@@ -14,7 +14,7 @@ namespace MsSql.Adapter.Collector.Types
         public string SqlType { get; set; } = string.Empty;
 
         [DataMember(Order = 3)]
-        public List<TvpParamMeta> TVP { get; set; } = new List<TvpParamMeta>();
+        public List<TvpParamMeta>? TVP { get; set; }
 
         [DataMember(Order = 4)]
         public bool HasDefaultValue { get; set; } = false;
