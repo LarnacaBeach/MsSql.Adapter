@@ -29,10 +29,10 @@ This adds the `<PackageReference>` to your project. You can additionally mark th
     <LangVersion>Latest</LangVersion>
   </PropertyGroup>
 
-  <!-- Add the package -->~~~~
-  <PackageReference Include="MsSql.Adapter.Generator" Version="1.0.0"
-    PrivateAssets="all" ExcludeAssets="runtime" />
-  <!-- -->
+  <ItemGroup>
+    <!-- Add the package -->
+    <PackageReference Include="MsSql.Adapter.Generator" Version="1.0.6" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
 
 </Project>
 ```
@@ -83,3 +83,28 @@ public interface IDalService
 Additional files that can be used in javascript to add support for nullable values are generated in `obj/GeneratedFiles/javascript/` folder.
 
 For a boilerplate project which creates a gRPC service check [MsSql.Adapter](https://github.com/LarnacaBeach/mssql.adapter/tree/main/examples/mssql.adapter)
+
+## Preserving usages of the `[MsSqlAdapter]` attribute
+
+The `[MsSqlAdapter]` attribute is decorated with the `[Conditional]` attribute, [so their usage will not appear in the build output of your project](https://andrewlock.net/conditional-compilation-for-ignoring-method-calls-with-the-conditionalattribute/#applying-the-conditional-attribute-to-classes). If you use reflection at runtime on one of your `class`es, you will not find `[MsSqlAdapter]` in the list of custom attributes.
+
+If you wish to preserve these attributes in the build output, you can define the `MSSQL_ADAPTER_USAGES` MSBuild variable. Note that this means your project will have a runtime-dependency on _MsSql.Adapter.Generator.Attributes.dll_ so you need to ensure this is included in your build output.
+
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net6.0</TargetFramework>
+    <!--  Define the MSBuild constant to preserve usages   -->
+    <DefineConstants>MSSQL_ADAPTER_USAGES</DefineConstants>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Add the package -->
+    <PackageReference Include="MsSql.Adapter.Generator" Version="1.0.6" PrivateAssets="all" />
+    <!--              ☝ You must not exclude the runtime assets in this case -->
+  </ItemGroup>
+
+</Project>
+```

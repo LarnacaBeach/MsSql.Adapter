@@ -5,8 +5,9 @@ namespace MsSql.Adapter.Generator
     /// <summary>
     /// Add to a Class to indicate that adapter methods should be generated for it
     /// </summary>
-    [System.AttributeUsage(System.AttributeTargets.Class)]
-    public class MsSqlAdapterAttribute : System.Attribute
+    [AttributeUsage(AttributeTargets.Class)]
+    [System.Diagnostics.Conditional("MSSQL_ADAPTER_USAGES")]
+    public class MsSqlAdapterAttribute : Attribute
     {
         /// <summary>
         /// The path to the result.json file created by dotnet-mssql-collector
