@@ -86,7 +86,7 @@ For a boilerplate project which creates a gRPC service check [MsSql.Adapter](htt
 
 ## Preserving usages of the `[MsSqlAdapter]` attribute
 
-The `[MsSqlAdapter]` attribute is decorated with the `[Conditional]` attribute, [so their usage will not appear in the build output of your project](https://andrewlock.net/conditional-compilation-for-ignoring-method-calls-with-the-conditionalattribute/#applying-the-conditional-attribute-to-classes). If you use reflection at runtime on one of your `class`es, you will not find `[MsSqlAdapter]` in the list of custom attributes.
+The `[MsSqlAdapter]` attribute is decorated with the `[Conditional]` attribute, so their usage will not appear in the build output of your project. If you use reflection at runtime on one of your `class`es, you will not find `[MsSqlAdapter]` in the list of custom attributes.
 
 If you wish to preserve these attributes in the build output, you can define the `MSSQL_ADAPTER_USAGES` MSBuild variable. Note that this means your project will have a runtime-dependency on _MsSql.Adapter.Generator.Attributes.dll_ so you need to ensure this is included in your build output.
 

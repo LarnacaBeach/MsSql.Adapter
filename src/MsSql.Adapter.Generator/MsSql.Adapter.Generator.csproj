@@ -14,7 +14,7 @@
 	<!-- Optional: Publish the repository URL in the built .nupkg (in the NuSpec <Repository> element) -->
 	<PublishRepositoryUrl>true</PublishRepositoryUrl>
     <Description>A source generator for creating a service with endpoints for all stored procedures from mssql-adapter-collector result.json</Description>
-	<Version>1.0.6</Version>
+	<Version>1.1.0</Version>
     <Authors>LarnacaBeach Contributors</Authors>
 	<PackFolder>analyzers\cs</PackFolder>
 	<DebugType>embedded</DebugType>

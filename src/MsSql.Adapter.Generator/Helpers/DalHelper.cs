@@ -160,6 +160,46 @@ namespace MsSql.Adapter.Generator.Helpers
             };
         }
 
+        public static string GetCSharpTypeDefaultValue(string sqlType)
+        {
+            return sqlType.ToLower() switch
+            {
+                "bigint" => "(long)0",
+                "binary" => "Array.Empty<byte>()",
+                "bit" => "false",
+                "char" => "\"\"",
+                "date" => "default",
+                "filestream" => "Array.Empty<byte>()",
+                "image" => "Array.Empty<byte>()",
+                "tinyint" => "(byte)0",
+                "int" => "0",
+                "float" => "(double)0",
+                "decimal" => "(decimal)0",
+                "money" => "(decimal)0",
+                "nchar" => "\"\"",
+                "ntext" => "\"\"",
+                "numeric" => "(decimal)0",
+                "nvarchar" => "\"\"",
+                "real" => "(Single)0",
+                "rowversion" => "Array.Empty<byte>()",
+                "smalldatetime" => "default",
+                "smallint" => "(short)0",
+                "smallmoney" => "(decimal)0",
+                "sql_variant" => "new object()",
+                "text" => "\"\"",
+                "time" => "default",
+                "timestamp" => "Array.Empty<byte>()",
+                "uniqueidentifier" => "default",
+                "varbinary" => "Array.Empty<byte>()",
+                "varchar" => "\"\"",
+                "xml" => "\"\"",
+                "datetime" => "default",
+                "datetime2" => "default",
+                "datetimeoffset" => "default",
+                _ => "new object()",
+            };
+        }
+
         public static string GetCSharpNullableFriendlyType(string sqlType)
         {
             return sqlType.ToLower() switch

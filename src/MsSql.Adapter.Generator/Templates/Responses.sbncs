@@ -46,8 +46,10 @@ public class {{ className }}
     {
 {{~
         for p in param.Params
-            memberType = GetCSharpNullableFriendlyType p.SqlType
             memberName = ToPascalCase p.Name
+
+            if p.HasDefaultValue
+                memberType = GetCSharpNullableFriendlyType p.SqlType
 }}
         {{ memberType }} _{{ memberName }};
         [DataMember(Order = {{ p.Order }})]
@@ -56,6 +58,13 @@ public class {{ className }}
             set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ p.Order }}); }
         }
 {{~
+            else
+                memberType = GetCSharpFriendlyType p.SqlType
+~}}
+        [DataMember(Order = {{ p.Order }})]
+        public {{ memberType }} {{ memberName }} { get; set; } = {{ GetCSharpTypeDefaultValue p.SqlType }};
+{{~
+            end
         end
 }}
         {{ getNullableRegion className param.ParamsMaxOrder }}

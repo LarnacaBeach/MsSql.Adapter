@@ -30,7 +30,8 @@ public class {{ className }}
     public List<TVP{{ param.Name }}> {{ memberName }} { get; set; } = new();
 {{~
         else
-            memberType = GetCSharpNullableFriendlyType param.SqlType
+            if param.HasDefaultValue
+                memberType = GetCSharpNullableFriendlyType param.SqlType
 }}
     {{ memberType }} _{{ memberName }};
     [DataMember(Order = {{ param.Order }})]
@@ -39,6 +40,13 @@ public class {{ className }}
         set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ param.Order }}); }
     }
 {{~
+            else
+                memberType = GetCSharpFriendlyType param.SqlType
+~}}
+    [DataMember(Order = {{ param.Order }})]
+    public {{ memberType }} {{ memberName }} { get; set; } = {{ GetCSharpTypeDefaultValue param.SqlType }};
+{{~
+            end
         end
     end
 }}
@@ -60,8 +68,10 @@ public class {{ className }}
 {
 {{~
         for p in param.TVP
-            memberType = GetCSharpNullableFriendlyType p.SqlType
             memberName = ToPascalCase p.Name
+
+            if p.IsNullable
+                memberType = GetCSharpNullableFriendlyType p.SqlType
 }}
     {{ memberType }} _{{ memberName }};
     [DataMember(Order = {{ p.Order }})]
@@ -70,6 +80,13 @@ public class {{ className }}
         set { _{{ memberName }} = value; _SetNullable(_{{ memberName }}==null, {{ p.Order }}); }
     }
 {{~
+            else
+                memberType = GetCSharpFriendlyType p.SqlType
+~}}
+    [DataMember(Order = {{ p.Order }})]
+    public {{ memberType }} {{ memberName }} { get; set; } = {{ GetCSharpTypeDefaultValue p.SqlType }};
+{{~
+            end
         end
 }}
     {{ getNullableRegion className param.TVPMaxOrder }}

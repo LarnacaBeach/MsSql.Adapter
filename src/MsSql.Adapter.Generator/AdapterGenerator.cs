@@ -20,21 +20,21 @@ public class AdapterGenerator : IIncrementalGenerator
     public static readonly DiagnosticDescriptor GeneratorException = new(
         "AG0001",
         "Generator Exception",
-        "{Message} {InnerExceptionMessage} {StackTrace}",
+        "{0} {1} {2}",
         "Usage",
         DiagnosticSeverity.Error,
         true);
     public static readonly DiagnosticDescriptor InvalidSymbol = new(
         "AG0002",
         "Invalid Symbol",
-        "{Identifier} symbol could not be determined",
+        "{0} symbol could not be determined",
         "Usage",
         DiagnosticSeverity.Warning,
         true);
     public static readonly DiagnosticDescriptor InvalidOutputPath = new(
         "AG0003",
         "Invalid Output Path",
-        "{Filepath} could not be generated, because output path could not be found",
+        "{0} could not be generated, because output path could not be found",
         "Usage",
         DiagnosticSeverity.Warning,
         true);
