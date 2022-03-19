@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Options;
 using MsSql.Adapter.Collector.Types;
 using MsSql.Adapter.Utils;
-using Newtonsoft.Json;
 using MsSql.Adapter.Standard.Types;
 using System;
 using System.Collections.Generic;
@@ -12,6 +11,7 @@ using System.Linq;
 using System.Security;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Text.Json;
 
 namespace MsSql.Collector
 {
@@ -42,7 +42,7 @@ namespace MsSql.Collector
             {
                 var prevMetaFile = Path.Join(workingDirectory, options.PreviousResultFile);
                 //build index
-                var idx = new ContractOrderDictionary(File.Exists(prevMetaFile) ? JsonConvert.DeserializeObject<DatabaseMeta>(File.ReadAllText(prevMetaFile)) : null);
+                var idx = new ContractOrderDictionary(File.Exists(prevMetaFile) ? JsonSerializer.Deserialize<DatabaseMeta>(File.ReadAllText(prevMetaFile)) : null);
 
                 var resp = await GetDatabaseMeta(idx).ConfigureAwait(false);
                 if (resp.Fail())
@@ -51,7 +51,7 @@ namespace MsSql.Collector
                 }
 
                 var jsonFile = Path.Join(workingDirectory, options.ResultFile);
-                File.WriteAllText(jsonFile, JsonConvert.SerializeObject(resp.Data, Formatting.Indented));
+                File.WriteAllText(jsonFile, JsonSerializer.Serialize(resp.Data, new JsonSerializerOptions { WriteIndented = true }));
                 return new OperationResult { StatusMessage = $"Database meta was saved to: {jsonFile}" };
             }
             catch (Exception ex)
@@ -297,11 +297,12 @@ WHERE procs.name = @procName", connection);
                 foreach (DataRow? row in rows)
                 {
                     if (row == null) continue;
-
+                    
                     list.Add(new ParamMeta
                     {
                         Name = row["ColumnName"].ToString()!,
                         SqlType = row["DataTypeName"].ToString()!,
+                        HasDefaultValue = (bool)row["AllowDBNull"],
                     });
                 }
             }
