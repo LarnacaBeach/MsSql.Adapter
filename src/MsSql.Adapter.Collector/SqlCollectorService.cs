@@ -193,7 +193,7 @@ WHERE procs.name = @procName", connection);
                     {
                         Name = paramName,
                         SqlType = row["SQL_TYPE"].ToString()!,
-                        HasDefaultValue = (bool)row["HAS_DEFAULT"],
+                        IsNullable = (bool)row["HAS_DEFAULT"],
                         Order = idx.GetOrAddRequestIndex(spName, paramName)
                     });
                 }
@@ -302,7 +302,7 @@ WHERE procs.name = @procName", connection);
                     {
                         Name = row["ColumnName"].ToString()!,
                         SqlType = row["DataTypeName"].ToString()!,
-                        HasDefaultValue = (bool)row["AllowDBNull"],
+                        IsNullable = (bool)row["AllowDBNull"],
                     });
                 }
             }
