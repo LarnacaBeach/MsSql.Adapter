@@ -17,7 +17,7 @@ namespace MsSql.Adapter.Collector.Types
         public List<TvpParamMeta>? TVP { get; set; }
 
         [DataMember(Order = 4)]
-        public bool HasDefaultValue { get; set; } = false;
+        public bool IsNullable { get; set; } = false;
 
         [DataMember(Order = 5)]
         public int Order { get; set; } = 0;
