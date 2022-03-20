@@ -17,7 +17,7 @@ public class ParamMeta
     public List<TvpParamMeta>? TVP { get; set; }
 
     [DataMember(Order = 4)]
-    public bool HasDefaultValue { get; set; }
+    public bool IsNullable { get; set; }
 
     [DataMember(Order = 5)]
     public int Order { get; set; }
@@ -36,7 +36,7 @@ public class ParamMeta
             ?.Select(x => x.Order)
             ?.DefaultIfEmpty()
             ?.Max() ?? 0;
-        HasDefaultValue = paramMeta.HasDefaultValue;
+        IsNullable = paramMeta.IsNullable;
         Order = paramMeta.Order;
     }
 }

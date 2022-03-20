@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using System.Threading.Tasks;
+using ProtoBuf.Grpc;
 
 namespace {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
 
@@ -10,6 +11,6 @@ public interface I{{ Name }}Service
 for proc in DbMeta.Procedures
     baseClass = GetBaseClassName proc.SpName
 }}
-    Task<{{ baseClass }}Response> {{ baseClass }}({{ baseClass }}Request req);
+    Task<{{ baseClass }}Response> {{ baseClass }}({{ baseClass }}Request req, CallContext context = default);
 {{~ end ~}}
 }

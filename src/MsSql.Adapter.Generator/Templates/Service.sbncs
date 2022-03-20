@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using MsSql.Adapter.Utils;
 using MsSql.Adapter.Standard.Types;
+using ProtoBuf.Grpc;
 using {{ Namespace }}.{{ ToPascalCase DbMeta.Name }};
 
 namespace {{ Namespace }};
@@ -32,7 +33,7 @@ for proc in DbMeta.Procedures
     baseClassName = GetBaseClassName proc.SpName
     responseClass = baseClassName + "Response"
 }}
-    public async Task<{{ responseClass}}> {{ baseClassName }} ({{ baseClassName }}Request req)
+    public async Task<{{ responseClass}}> {{ baseClassName }} ({{ baseClassName }}Request req, CallContext context = default)
     {
         try
         {  
@@ -98,7 +99,7 @@ for proc in DbMeta.Procedures
                     });
 {{~
         else
-            if p.HasDefaultValue
+            if p.IsNullable
 ~}}
                     if (req.{{ ToPascalCase p.Name }} == null)
                     {
@@ -223,7 +224,7 @@ for proc in DbMeta.Procedures
                 x = p.Params[$k]
                 columnOrder = "columnDef[" + $k + "].Order"
 
-                if x.HasDefaultValue
+                if x.IsNullable
 ~}}
                         {{ ToPascalCase x.Name }} = (columnDef[{{ $k }}].Order >= 0 ? {{ GenerateDataRowReadValue x.SqlType columnOrder }} : default){{ if $k < totalParams }},{{ end }}
 {{~

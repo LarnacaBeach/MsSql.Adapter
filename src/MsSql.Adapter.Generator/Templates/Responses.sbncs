@@ -48,7 +48,7 @@ public class {{ className }}
         for p in param.Params
             memberName = ToPascalCase p.Name
 
-            if p.HasDefaultValue
+            if p.IsNullable
                 memberType = GetCSharpNullableFriendlyType p.SqlType
 }}
         {{ memberType }} _{{ memberName }};
@@ -60,7 +60,7 @@ public class {{ className }}
 {{~
             else
                 memberType = GetCSharpFriendlyType p.SqlType
-~}}
+}}
         [DataMember(Order = {{ p.Order }})]
         public {{ memberType }} {{ memberName }} { get; set; } = {{ GetCSharpTypeDefaultValue p.SqlType }};
 {{~

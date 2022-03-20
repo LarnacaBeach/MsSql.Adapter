@@ -30,7 +30,7 @@ public class {{ className }}
     public List<TVP{{ param.Name }}> {{ memberName }} { get; set; } = new();
 {{~
         else
-            if param.HasDefaultValue
+            if param.IsNullable
                 memberType = GetCSharpNullableFriendlyType param.SqlType
 }}
     {{ memberType }} _{{ memberName }};
@@ -82,7 +82,7 @@ public class {{ className }}
 {{~
             else
                 memberType = GetCSharpFriendlyType p.SqlType
-~}}
+}}
     [DataMember(Order = {{ p.Order }})]
     public {{ memberType }} {{ memberName }} { get; set; } = {{ GetCSharpTypeDefaultValue p.SqlType }};
 {{~
