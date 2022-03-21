@@ -67,6 +67,23 @@ public class {{ className }}
             end
         end
 }}
+
+        public {{ className }}()
+        {
+            _InternalNullFields = new BitArray(_MaxOrder, true);
+{{~
+        for p in param.Params
+            memberName = ToPascalCase p.Name
+
+            if !p.IsNullable
+~}}
+            _InternalNullFields.Set({{ p.Order-1 }}, false);
+{{~
+            end
+        end
+~}}
+        }
+
         {{ getNullableRegion className param.ParamsMaxOrder }}
     }
 {{~

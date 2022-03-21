@@ -8,11 +8,6 @@ public byte[]? InternalNullFields {
     set { if (value != null) { _InternalNullFields = new BitArray(value); } else { _InternalNullFields = null; }; }
 }
 
-public {{ className }}()
-{
-    _InternalNullFields = new BitArray(_MaxOrder, true);
-}
-
 private byte[]? GetBytes(BitArray? bits)
 {
     if (bits == null) return null;

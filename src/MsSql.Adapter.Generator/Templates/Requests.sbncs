@@ -49,7 +49,24 @@ public class {{ className }}
             end
         end
     end
-}}
+~}}
+
+    public {{ className }}()
+    {
+        _InternalNullFields = new BitArray(_MaxOrder, true);
+{{~
+    for param in proc.Request
+        memberName = ToPascalCase param.Name
+
+        if !param.IsNullable
+~}}
+        _InternalNullFields.Set({{ param.Order-1 }}, false);
+{{~
+        end
+    end
+~}}
+    }
+
     {{ getNullableRegion className proc.RequestMaxOrder }}
 }
 {{~
@@ -88,7 +105,24 @@ public class {{ className }}
 {{~
             end
         end
-}}
+~}}
+
+    public {{ className }}()
+    {
+        _InternalNullFields = new BitArray(_MaxOrder, true);
+{{~
+        for p in param.TVP
+            memberName = ToPascalCase p.Name
+
+            if !p.IsNullable
+~}}
+        _InternalNullFields.Set({{ p.Order-1 }}, false);
+{{~
+            end
+        end
+~}}
+    }
+
     {{ getNullableRegion className param.TVPMaxOrder }}
 }
 {{~
