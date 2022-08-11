@@ -6,7 +6,7 @@ namespace MsSql.Collector
 {
     public class ContractOrderDictionary
     {
-        private Dictionary<string, int> Indexs = new Dictionary<string, int>();
+        private Dictionary<string, int> Indexes = new Dictionary<string, int>();
         public ContractOrderDictionary(DatabaseMeta? meta)
         {
             if (meta == null) return;
@@ -43,7 +43,7 @@ namespace MsSql.Collector
                     foreach (var param in respItem.Params)
                     {
                         SetIndex(GetResponseResultItemKey(proc.SpName, respItem.Name, param.Name), param.Order);
-                        maxResponseOrder = Math.Max(param.Order, maxParamOrder);
+                        maxParamOrder = Math.Max(param.Order, maxParamOrder);
                     }
 
                     SetIndex(GetResponseResultMaxKey(proc.SpName, respItem.Name), maxParamOrder);
@@ -55,10 +55,10 @@ namespace MsSql.Collector
 
         public int GetOrAddIndex(string maxKey, string key, int minIndex = 1)
         {
-            if (!Indexs.TryGetValue(key, out int value))
+            if (!Indexes.TryGetValue(key, out int value))
             {
                 value = minIndex;
-                if (Indexs.TryGetValue(maxKey, out int maxvalue))
+                if (Indexes.TryGetValue(maxKey, out int maxvalue))
                 {
                     value = maxvalue + 1;
                 }
@@ -66,12 +66,13 @@ namespace MsSql.Collector
                 SetIndex(maxKey, value);
                 SetIndex(key, value);
             }
+
             return value;
         }
 
         private void SetIndex(string key, int value)
         {
-            Indexs[key] = value;
+            Indexes[key] = value;
         }
 
         public int GetOrAddRequestIndex(string spName, string itemName)
@@ -86,7 +87,8 @@ namespace MsSql.Collector
 
         public int GetOrAddResponseIndex(string spName, string itemName)
         {
-            return GetOrAddIndex(GetResponseMaxKey(spName), GetResponseItemKey(spName, itemName), minIndex: 3/* reserve order indexs for StatusCode,StatusMessage*/);
+            // reserve order indexes for StatusCode, StatusMessage
+            return GetOrAddIndex(GetResponseMaxKey(spName), GetResponseItemKey(spName, itemName), minIndex: 3);
         }
 
         public int GetOrAddResponseResultSetIndex(string spName, string resultName, string itemName)
@@ -123,7 +125,7 @@ namespace MsSql.Collector
 
         private static string GetResponseMaxKey(string spName)
         {
-            return $"{spName}::ResponsetMax";
+            return $"{spName}::ResponseMax";
         }
 
         private static string GetResponseResultItemKey(string spName, string resultName, string itemName)
@@ -133,7 +135,7 @@ namespace MsSql.Collector
 
         private static string GetResponseResultMaxKey(string spName, string resultName)
         {
-            return $"{spName}::ResponsetMax::Result:{resultName}";
+            return $"{spName}::ResponseMax::Result:{resultName}";
         }
 
         #endregion helpers..

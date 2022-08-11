@@ -19,7 +19,7 @@
     <IncludeSymbols>true</IncludeSymbols>
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <Description>Collects information about all the stored procedures in a database</Description>
-	<Version>1.1.0</Version>
+	<Version>1.2.0</Version>
     <Authors>LarnacaBeach Contributors</Authors>
     <PackAsTool>true</PackAsTool>
     <ToolCommandName>mssql-adapter-collector</ToolCommandName>

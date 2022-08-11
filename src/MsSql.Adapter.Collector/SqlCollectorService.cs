@@ -375,7 +375,7 @@ WHERE procs.name = @procName", connection);
                     {
                         var resultName = $"ResultSet{resultSetCount}";
                         var currentRespones = GetProcedureResultSetParams(dr.Reader!, spName);
-                        // Order =
+
                         if (currentRespones.Any())
                         {
                             var item = new ResponseItem
